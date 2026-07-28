@@ -5,6 +5,7 @@ export enum ROLES {
 }
 
 export class User {
+    private _id: string;
     private _name: string;
     private _passwordHash: string;
     private _isWorking: boolean;
@@ -12,11 +13,16 @@ export class User {
     private _role: ROLES;
 
     constructor(name: string, passwordHash: string, isWorking: boolean, role: ROLES) {
+        this._id = crypto.randomUUID();
         this._name = name;
         this._passwordHash = passwordHash;
         this._isWorking = isWorking;
         this._isActive = true;
         this._role = role;
+    }
+
+    public get id(): string {
+        return this._id;
     }
 
     public get name(): string {
