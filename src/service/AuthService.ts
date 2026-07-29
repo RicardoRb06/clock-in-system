@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { User } from "../model/User.js";
 import { UserRepository } from "../repository/UserRepository.js";
-import type { RegisterRequestDto } from "../dto/Auth/Request/RegisterRequest.js";
+import type { RegisterRequestDto } from "../dto/auth/request/RegisterRequest.js";
 
 export class AuthService {
 
