@@ -6,3 +6,5 @@ export const LoginRequestSchema = z.object({
     password: z.string()
         .min(6, "Campo 'senha' não pode ficar vazio"),
 });
+
+export type LoginRequestDto = z.infer<typeof LoginRequestSchema>;
