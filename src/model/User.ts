@@ -12,13 +12,13 @@ export class User {
     private _isActive: boolean;
     private _role: ROLES;
 
-    constructor(name: string, passwordHash: string, isWorking: boolean, role: ROLES) {
+    constructor(name: string, passwordHash: string) {
         this._id = crypto.randomUUID();
         this._name = name;
         this._passwordHash = passwordHash;
-        this._isWorking = isWorking;
+        this._isWorking = false;
         this._isActive = true;
-        this._role = role;
+        this._role = ROLES.USER;
     }
 
     public get id(): string {
