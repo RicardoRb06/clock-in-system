@@ -9,6 +9,10 @@ export class UserRepository {
         await prisma.user.create({user});
     }
 
+    public async delete(user: User) {
+        await prisma.user.delete({ where: { name: user.name } });
+    }
+
     public async findByName(name: string) {
         return await prisma.user.findUnique({ where: { name } });
     }
