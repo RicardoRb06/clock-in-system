@@ -8,4 +8,8 @@ export class UserRepository {
     public async save(user: User) {
         await prisma.user.create({user});
     }
+
+    public async findByName(name: string) {
+        return await prisma.user.findUnique({ where: { name } });
+    }
 }
