@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { User } from "../model/User.js";
 import { UserRepository } from "../repository/UserRepository.js";
+import type { RegisterRequestDto } from "../dto/Auth/Request/RegisterRequest.js";
 
 export class AuthService {
 
@@ -10,10 +11,9 @@ export class AuthService {
         this.userRepository = userRepository;
     }
 
-    public async register(name: string, password: string): Promise<User> {
-        const hash = await bcrypt.hash(password, 10);
-        const user = new User(name, hash);
+    public async register(request: RegisterRequestDto) {
+        const hash = await bcrypt.hash(request.password, 10);
+        const user = new User(request.name, hash);
         this.userRepository.save(user);
-        return user;
     }
 }
