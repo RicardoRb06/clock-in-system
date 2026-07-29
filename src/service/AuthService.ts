@@ -18,4 +18,7 @@ export class AuthService {
         this.userRepository.save(user);
         return { name: user.name };
     }
+
+    public async login(request: LoginRequestDto): Promise<LoginResponseDto> {
+    }
 }
