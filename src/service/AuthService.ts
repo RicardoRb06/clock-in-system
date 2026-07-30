@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { User } from "../model/User.js";
 import { UserRepository } from "../repository/UserRepository.js";
 import type { RegisterRequestDto } from "../dto/auth/request/RegisterRequest.js";
