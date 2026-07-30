@@ -35,6 +35,6 @@ export class AuthMiddleware {
             role: decoded.role
         };
 
-            next();
+        next();
     };
 }
