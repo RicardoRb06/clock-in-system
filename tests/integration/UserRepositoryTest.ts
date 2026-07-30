@@ -1,0 +1,21 @@
+import { beforeAll, afterAll, afterEach } from 'vitest';
+import { startDatabase, stopDatabase } from '../helpers/setupDB.js';
+import { UserRepository } from '../../src/repository/UserRepository.js';
+import type { PrismaClient } from '@prisma/client';
+
+let repository: UserRepository;
+let prisma: PrismaClient;
+
+beforeAll(async () => {
+    const setup = await startDatabase();
+    prisma = setup.prisma;
+    repository = new UserRepository(prisma);
+}, 60000);
+
+afterAll(async () => {
+    await stopDatabase();
+});
+
+afterEach(async () => {
+    await prisma.user.deleteMany();
+});
