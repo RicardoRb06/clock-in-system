@@ -6,14 +6,14 @@ const prisma = new PrismaClient();
 export class UserRepository {
 
     public async save(user: User) {
-        await prisma.user.create({user});
+        await prisma.users.create({user});
     }
 
     public async delete(user: User) {
-        await prisma.user.delete({ where: { name: user.name } });
+        await prisma.users.delete({ where: { name: user.name } });
     }
 
     public async findByName(name: string) {
-        return await prisma.user.findUnique({ where: { name } });
+        return await prisma.users.findUnique({ where: { name } });
     }
 }
