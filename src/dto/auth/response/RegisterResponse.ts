@@ -1,3 +1,5 @@
 export interface RegisterResponseDto {
-    name: string;
+    sucess: boolean,
+    token: string,
+    error: string
 }
