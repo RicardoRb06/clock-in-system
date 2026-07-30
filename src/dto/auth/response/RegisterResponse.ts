@@ -1,5 +1,5 @@
 export interface RegisterResponseDto {
-    sucess: boolean,
+    success: boolean,
     token: string,
     error: string
 }
