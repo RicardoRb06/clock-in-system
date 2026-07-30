@@ -3,10 +3,11 @@ import { UserRepository } from '../repository/UserRepository.js';
 import { AuthService } from '../service/AuthService.js';
 import { AuthController } from '../controller/AuthController.js';
 import { AuthMiddleware } from '../middlewares/AuthMiddleware.js';
+import { prisma } from '../database/prisma.js';
 
 export const routes: Router = Router();
 
-const userRepository = new UserRepository();
+const userRepository = new UserRepository(prisma);
 
 const authService = new AuthService(userRepository);
 
