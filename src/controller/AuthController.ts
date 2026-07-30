@@ -1,13 +1,20 @@
-import { type Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { LoginRequestSchema } from "../dto/auth/request/LoginRequest.js";
 import { RegisterRequestSchema } from '../dto/auth/request/RegisterRequest.js';
+import { AuthService } from '../service/AuthService.js';
 
 export class AuthController {
     
+    private authService: AuthService;
+    
+    constructor(authService: AuthService) {
+        this.authService = authService;
+    }
+
     async login(req: Request, res: Response) {
         const dto = LoginRequestSchema.parse(req.body);
 
-        const result = await AuthService.login(dto);
+        const result = await this.authService.login(dto);
             
         if (!result.success) {
             return res.status(401).json({ 
@@ -26,7 +33,7 @@ export class AuthController {
     async register(req: Request, res: Response) {
         const dto = RegisterRequestSchema.parse(req.body);
 
-        const result = await AuthService.register(dto);
+        const result = await this.authService.register(dto);
             
         if (!result.success) {
             return res.status(401).json({ 
