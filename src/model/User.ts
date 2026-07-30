@@ -64,4 +64,12 @@ export class User {
     public set role(role: ROLES) {
         this._role = role;
     }
+
+    public static fromPersistence(data: { id: string; name: string; passwordHash: string; isActive: boolean; roles: string }): User {
+        const user = new User(data.name, data.passwordHash);
+        user.id = data.id;
+        user.isActive = data.isActive;
+        user.role = data.roles as ROLES;
+        return user;
+    }
 }
