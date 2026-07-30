@@ -1,9 +1,9 @@
-import { type Request, type Response } from 'express';
+import type { Request, Response } from 'express';
 import { LoginRequestSchema } from "../dto/auth/request/LoginRequest.js";
 import { RegisterRequestSchema } from '../dto/auth/request/RegisterRequest.js';
 
 export class AuthController {
-    
+
     async login(req: Request, res: Response) {
         const dto = LoginRequestSchema.parse(req.body);
 
