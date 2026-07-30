@@ -10,7 +10,7 @@ export class UserRepository {
     }
 
     public async save(user: User) {
-        await this.prisma.users.create({ data: {
+        await this.prisma.user.create({ data: {
             name: user.name,
             passwordHash: user.passwordHash,
             isActive: user.isActive,
@@ -19,10 +19,10 @@ export class UserRepository {
     }
 
     public async delete(user: User) {
-        await this.prisma.users.delete({ where: { name: user.name } });
+        await this.prisma.user.delete({ where: { name: user.name } });
     }
 
     public async findByName(name: string) {
-        return await this.prisma.users.findUnique({ where: { name } });
+        return await this.prisma.user.findUnique({ where: { name } });
     }
 }
