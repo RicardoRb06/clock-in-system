@@ -7,11 +7,11 @@ let container: StartedPostgreSqlContainer | undefined;
 let prisma: PrismaClient | undefined;
 
 export async function startDatabase() {
-    const container = await new PostgreSqlContainer("postgres:15.3").start();
+    container = await new PostgreSqlContainer("postgres:15.3").start();
     
     const databaseUrl = container.getConnectionUri();   
 
-    execSync(`pnpm dlx prisma migrate deploy`, {
+    execSync(`pnpm exec prisma migrate deploy`, {
         env: {
             ...process.env,
             DATABASE_URL: databaseUrl,
