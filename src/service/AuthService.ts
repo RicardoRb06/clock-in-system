@@ -19,7 +19,7 @@ export class AuthService {
         const hash = await bcrypt.hash(request.password, 10);
         const user = new User(request.name, hash);
         
-        this.userRepository.save(user);
+        await this.userRepository.save(user);
 
         const payload = {
             id: user.id,
