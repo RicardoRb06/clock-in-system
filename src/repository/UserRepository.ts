@@ -1,10 +1,16 @@
-import { prisma } from "../database/prisma.js";
+import type { PrismaClient } from "@prisma/client";
 import type { User } from "../model/User.js";
 
 export class UserRepository {
 
+    private readonly prisma: PrismaClient;
+
+    constructor(prisma: PrismaClient) {
+        this.prisma = prisma;
+    }
+
     public async save(user: User) {
-        await prisma.users.create({ data: {
+        await this.prisma.users.create({ data: {
             name: user.name,
             passwordHash: user.passwordHash,
             isActive: user.isActive,
@@ -13,10 +19,10 @@ export class UserRepository {
     }
 
     public async delete(user: User) {
-        await prisma.users.delete({ where: { name: user.name } });
+        await this.prisma.users.delete({ where: { name: user.name } });
     }
 
     public async findByName(name: string) {
-        return await prisma.users.findUnique({ where: { name } });
+        return await this.prisma.users.findUnique({ where: { name } });
     }
 }
