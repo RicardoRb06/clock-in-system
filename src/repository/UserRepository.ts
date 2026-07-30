@@ -1,5 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
-import type { User } from "../model/User.js";
+import { User } from "../model/User.js";
 
 export class UserRepository {
 
@@ -23,6 +23,10 @@ export class UserRepository {
     }
 
     public async findByName(name: string) {
-        return await this.prisma.user.findUnique({ where: { name } });
+        const userResponse = await this.prisma.user.findUnique({ where: { name } });
+        if(!userResponse) {
+            return null;
+        }
+        return User.fromPersistence(userResponse);
     }
 }
