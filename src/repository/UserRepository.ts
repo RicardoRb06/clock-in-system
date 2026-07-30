@@ -1,12 +1,15 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../database/prisma.js";
 import type { User } from "../model/User.js";
-
-const prisma = new PrismaClient();
 
 export class UserRepository {
 
     public async save(user: User) {
-        await prisma.users.create({user});
+        await prisma.users.create({ data: {
+            name: user.name,
+            passwordHash: user.passwordHash,
+            isActive: user.isActive,
+            roles: user.role
+        }});
     }
 
     public async delete(user: User) {
