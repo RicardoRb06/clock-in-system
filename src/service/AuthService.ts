@@ -16,6 +16,11 @@ export class AuthService {
     }
 
     public async register(request: RegisterRequestDto): Promise<RegisterResponseDto> {
+        
+        if(!process.env.JWT_SECRET) {
+            throw new Error("JWT_SECRET_MISSING: A chave secreta do JWT não foi carregada do arquivo .env.");
+        }
+
         const hash = await bcrypt.hash(request.password, 10);
         const user = new User(request.name, hash);
         
@@ -27,10 +32,6 @@ export class AuthService {
             role: user.role
         }
 
-        if(!process.env.JWT_SECRET) {
-            throw new Error("JWT_SECRET_MISSING: A chave secreta do JWT não foi carregada do arquivo .env.");
-        }
-
         return { 
             success: true,
             token: jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }),
@@ -39,6 +40,11 @@ export class AuthService {
     }
 
     public async login(request: LoginRequestDto): Promise<LoginResponseDto> {
+        
+        if(!process.env.JWT_SECRET) {
+            throw new Error("JWT_SECRET_MISSING: A chave secreta do JWT não foi carregada do arquivo .env.");
+        }
+
         const user = await this.userRepository.findByName(request.name);
         
         if (!user) {
@@ -63,10 +69,6 @@ export class AuthService {
             id: user.id,
             name: user.name,
             role: user.role
-        }
-
-        if(!process.env.JWT_SECRET) {
-            throw new Error("JWT_SECRET_MISSING: A chave secreta do JWT não foi carregada do arquivo .env.");
         }
 
         return { 
