@@ -1,7 +1,8 @@
-import { beforeAll, afterAll, afterEach } from 'vitest';
+import { beforeAll, afterAll, afterEach, describe, it, expect } from 'vitest';
 import { startDatabase, stopDatabase } from '../helpers/setupDB.js';
 import { UserRepository } from '../../src/repository/UserRepository.js';
 import type { PrismaClient } from '@prisma/client';
+import { makeUser } from '../factory/UserFactory.js';
 
 let repository: UserRepository;
 let prisma: PrismaClient;
@@ -18,4 +19,14 @@ afterAll(async () => {
 
 afterEach(async () => {
     await prisma.user.deleteMany();
+});
+
+describe("UserRepository", () => {
+    it("should save a user", async () => {
+        const user = makeUser({name: "Ricardo"});
+
+        await repository.save(user);
+        const foundUser = await repository.findByName(user.name);
+        expect(foundUser).toEqual(user);
+    });
 });
