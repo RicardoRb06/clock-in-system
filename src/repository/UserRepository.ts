@@ -11,6 +11,7 @@ export class UserRepository {
 
     public async save(user: User) {
         await this.prisma.user.create({ data: {
+            id: user.id,
             name: user.name,
             passwordHash: user.passwordHash,
             isActive: user.isActive,
