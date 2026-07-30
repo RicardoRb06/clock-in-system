@@ -1,3 +1,5 @@
 export interface LoginResponseDto {
-    token: string;
+    success: boolean,
+    token: string | null,
+    error: string | null
 }
