@@ -34,4 +34,12 @@ describe("UserRepository", () => {
         const foundUser = await repository.findByName("NonExistentUser");
         expect(foundUser).toBeNull();
     });
+
+    it("should delete a user", async () => {
+        const user = makeUser({name: "Ricardo"});
+        await repository.save(user);
+        await repository.delete(user);
+        const foundUser = await repository.findByName(user.name);
+        expect(foundUser).toBeNull();
+    });
 });
