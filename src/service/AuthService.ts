@@ -5,7 +5,7 @@ import type { RegisterRequestDto } from "../dto/auth/request/RegisterRequest.js"
 import type { RegisterResponseDto } from "../dto/auth/response/RegisterResponse.js";
 import type { LoginRequestDto } from "../dto/auth/request/LoginRequest.js";
 import type { LoginResponseDto } from "../dto/auth/response/LoginResponse.js";
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 export class AuthService {
 
