@@ -11,31 +11,6 @@ export class AuthController {
         this.authService = authService;
     }
 
-    async login(req: Request, res: Response) {
-        const dto = LoginRequestSchema.parse(req.body);
-
-        const result = await this.authService.login(dto);
-            
-        if (!result.success) {
-            return res.status(400).json({ 
-                success: false, 
-                message: result.error 
-            });
-        }
-
-        res.cookie('auth_token', result.token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 3600000
-        });
-
-        return res.status(201).json({
-            success: true,
-            tokenType: 'Bearer'
-        });
-    }
-
     async register(req: Request, res: Response) {
         const dto = RegisterRequestSchema.parse(req.body);
 
@@ -55,6 +30,31 @@ export class AuthController {
             maxAge: 3600000
         });
 
+
+        return res.status(201).json({
+            success: true,
+            tokenType: 'Bearer'
+        });
+    }
+
+        async login(req: Request, res: Response) {
+        const dto = LoginRequestSchema.parse(req.body);
+
+        const result = await this.authService.login(dto);
+            
+        if (!result.success) {
+            return res.status(400).json({ 
+                success: false, 
+                message: result.error 
+            });
+        }
+
+        res.cookie('auth_token', result.token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 3600000
+        });
 
         return res.status(201).json({
             success: true,
