@@ -55,7 +55,7 @@ export class AuthService {
             };
         }
 
-        const isMatch = await bcrypt.compare(request.password, user.password);
+        const isMatch = await bcrypt.compare(request.password, user.passwordHash);
         
         if (!isMatch) {
             return { 
