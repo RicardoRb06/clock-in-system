@@ -20,7 +20,7 @@ afterAll(async () => {
 afterEach(async () => {
     await prisma.user.deleteMany();
 });
-
+ 
 describe("UserRepository", () => {
     it("should save a user", async () => {
         const user = makeUser({name: "Ricardo"});
@@ -28,5 +28,10 @@ describe("UserRepository", () => {
         await repository.save(user);
         const foundUser = await repository.findByName(user.name);
         expect(foundUser).toEqual(user);
+    });
+
+    it("should return null when user is not found", async () => {
+        const foundUser = await repository.findByName("NonExistentUser");
+        expect(foundUser).toBeNull();
     });
 });
