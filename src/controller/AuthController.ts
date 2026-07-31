@@ -17,15 +17,21 @@ export class AuthController {
         const result = await this.authService.login(dto);
             
         if (!result.success) {
-            return res.status(401).json({ 
+            return res.status(400).json({ 
                 success: false, 
                 message: result.error 
             });
-    }
+        }
 
-        return res.status(200).json({
+        res.cookie('auth_token', result.token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 3600000
+        });
+
+        return res.status(201).json({
             success: true,
-            token: result.token,
             tokenType: 'Bearer'
         });
     }
@@ -36,15 +42,22 @@ export class AuthController {
         const result = await this.authService.register(dto);
             
         if (!result.success) {
-            return res.status(401).json({ 
+            return res.status(400).json({ 
                 success: false, 
                 message: result.error 
             });
         }
 
-        return res.status(200).json({
+        res.cookie('auth_token', result.token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 3600000
+        });
+
+
+        return res.status(201).json({
             success: true,
-            token: result.token,
             tokenType: 'Bearer'
         });
     }
