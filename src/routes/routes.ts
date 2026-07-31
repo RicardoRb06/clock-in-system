@@ -19,6 +19,6 @@ if (!jwtSecret) {
 
 const authMiddleware = new AuthMiddleware(jwtSecret);
 
-routes.post('/auth/register', authController.register);
+routes.post('/auth/register', (req, res) => authController.register(req, res));
 
-routes.post('/auth/login', authMiddleware.validate, authController.login);
+routes.post('/auth/login', authMiddleware.validate, (req, res) => authController.login(req, res));
