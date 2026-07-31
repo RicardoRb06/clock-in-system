@@ -47,7 +47,7 @@ export class AuthController {
     }
 
     async login(req: Request, res: Response) {
-        const dto = RegisterRequestSchema.safeParse(req.body);
+        const dto = LoginRequestSchema.safeParse(req.body);
 
         if (!dto.success) {
             return res.status(400).json({ 
