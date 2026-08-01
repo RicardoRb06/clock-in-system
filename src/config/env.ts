@@ -5,4 +5,4 @@ const envSchema = z.object({
     DATABASE_URL: z.string().min(1, "DATABASE_URL_MISSING: A URL do banco de dados não foi carregada do arquivo .env."),
 });
 
-export const env = envSchema.safeParse(process.env);
+export const env = envSchema.parse(process.env);
