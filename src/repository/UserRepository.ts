@@ -31,8 +31,8 @@ export class UserRepository {
         });
     }
 
-    public async delete(user: User) {
-        await this.prisma.user.delete({ where: { name: user.name } });
+    public async delete(id: string) {
+        await this.prisma.user.delete({ where: { id } });
     }
 
     public async findByName(name: string) {
