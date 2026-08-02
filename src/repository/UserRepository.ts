@@ -19,6 +19,18 @@ export class UserRepository {
         }});
     }
 
+    public async update(user: User) {
+        await this.prisma.user.update({ 
+            where: { id: user.id },
+            data: {
+                name: user.name,
+                passwordHash: user.passwordHash,
+                isActive: user.isActive,
+                roles: user.role
+            }
+        });
+    }
+
     public async delete(user: User) {
         await this.prisma.user.delete({ where: { name: user.name } });
     }
