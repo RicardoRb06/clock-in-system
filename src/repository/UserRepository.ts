@@ -50,4 +50,9 @@ export class UserRepository {
         }
         return User.fromPersistence(userResponse);
     }
+
+    public async existsByName(name: string) {
+        const userResponse = await this.prisma.user.findUnique({ where: { name } });
+        return !!userResponse;
+    }
 }
