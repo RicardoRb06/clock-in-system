@@ -18,6 +18,14 @@ export class AuthService {
 
     public async register(request: RegisterRequestDto): Promise<RegisterResponseDto> {
 
+        if(await this.userRepository.existsByName(request.name)) {
+            return { 
+                success: false,
+                token: null,
+                error: "Nome de usuário já existe"
+            }
+        }
+
         const hash = await bcrypt.hash(request.password, 10);
         const user = new User(request.name, hash);
         
