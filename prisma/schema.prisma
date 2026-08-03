@@ -11,26 +11,26 @@ datasource db {
   provider = "postgresql"
 }
 
-model user {
+model User {
   id String @id
   name String @unique
-  password_hash String
-  is_active Boolean @default(true)
+  passwordHash String @map("password_hash")
+  isActive Boolean @default(true) @map("is_active")
   role String
 
-  entries timeEntry[]
+  entries TimeEntry[]
 
   @@map("users")
 }
 
-model timeEntry {
+model TimeEntry {
   id String @id
-  user_id String
-  user user @relation(fields: [user_id], references: [id])
+  userId String @map("user_id")
+  user User @relation(fields: [userId], references: [id])
 
-  clock_in DateTime
-  clock_out DateTime?
+  clockIn DateTime @map("clock_in")
+  clockOut DateTime? @map("clock_out")
 
   @@map("time_entries")
-  @@index([user_id, clock_in])
+  @@index([userId, clockIn])
 }
