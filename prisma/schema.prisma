@@ -18,6 +18,8 @@ model user {
   isActive Boolean @default(true)
   roles String
 
+  auditLogs    auditLog[] 
+
   @@map("users")
 }
 
