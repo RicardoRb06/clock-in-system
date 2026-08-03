@@ -5,7 +5,7 @@ export enum ROLES {
 }
 
 export class User {
-    private readonly _id: string;
+    private _id: string;
     private _name: string;
     private _passwordHash: string;
     private _isWorking: boolean;
