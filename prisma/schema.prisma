@@ -18,12 +18,12 @@ model user {
   is_active Boolean @default(true)
   role String
 
-  entries time_entry[]
+  entries timeEntry[]
 
   @@map("users")
 }
 
-model time_entry {
+model timeEntry {
   id String @id
   user_id String
   user user @relation(fields: [user_id], references: [id])
