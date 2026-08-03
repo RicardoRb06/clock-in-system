@@ -41,7 +41,7 @@ export class TimeEntry {
         return duration;
     }
 
-    public static fromPersistnce(data: { id: string, userId: string, clockIn: string, clockOut: string | null }): TimeEntry {
+    public static fromPersistence(data: { id: string, userId: string, clockIn: string, clockOut: string | null }): TimeEntry {
         const timeEntry = new TimeEntry(data.userId, new Date(data.clockIn));
         timeEntry._id = data.id;
         timeEntry._clockOut = data.clockOut ? new Date(data.clockOut) : null;   
