@@ -13,8 +13,8 @@ export class TimeEntryRepository {
         await this.prisma.timeEntry.create({
             data: {
                 id: timeEntry.id,
-                user_id: timeEntry.userId,
-                clock_in: timeEntry.clockIn,
+                userId: timeEntry.userId,
+                clockIn: timeEntry.clockIn,
             }
         });
     }
@@ -22,7 +22,7 @@ export class TimeEntryRepository {
     public async updateClockOut(id: string, clockOut: Date): Promise<void> {
         await this.prisma.timeEntry.update({
             where: { id },
-            data: { clock_out: clockOut }
+            data: { clockOut: clockOut }
         });
     }
 
@@ -36,7 +36,7 @@ export class TimeEntryRepository {
                 }
             }
         });
-        
+
         return timeEntries.map(entry => TimeEntry.fromPersistence({
             id: entry.id,
             userId: entry.userId,
