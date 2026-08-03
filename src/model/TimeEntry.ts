@@ -30,4 +30,14 @@ export class TimeEntry {
     public set clockOut(clockOut: Date | null) {
         this._clockOut = clockOut;
     }
+
+    public getDuration(): number | null {
+        if(this._clockOut === null) {
+            return null;
+        }
+
+        const duration = (this._clockOut.getTime() - this._clockIn.getTime()) / 1000;
+        
+        return duration;
+    }
 }
