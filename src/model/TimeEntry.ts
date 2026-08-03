@@ -1,5 +1,5 @@
 export class TimeEntry {
-    private readonly _id: string;
+    private _id: string;
     private _userId: string;
     private _clockIn: Date;
     private _clockOut: Date | null;
@@ -37,7 +37,15 @@ export class TimeEntry {
         }
 
         const duration = (this._clockOut.getTime() - this._clockIn.getTime()) / 1000;
-        
+
         return duration;
+    }
+
+    public static fromPersistnce(data: { id: string, userId: string, clockIn: string, clockOut: string | null }): TimeEntry {
+        const timeEntry = new TimeEntry(data.userId, new Date(data.clockIn));
+        timeEntry._id = data.id;
+        timeEntry._clockOut = data.clockOut ? new Date(data.clockOut) : null;   
+
+        return timeEntry;
     }
 }
