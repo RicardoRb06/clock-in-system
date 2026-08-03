@@ -1,8 +1,8 @@
 import { beforeAll, afterAll, afterEach, describe, it, expect } from 'vitest';
 import { startDatabase, stopDatabase } from '../helpers/setupDB.js';
-import { UserRepository } from '../../src/repository/UserRepository.js';
+import { UserRepository } from '../../src/repository/user.repository.js';
 import type { PrismaClient } from '@prisma/client';
-import { makeUser } from '../factory/UserFactory.js';
+import { makeUser } from '../factory/user.factory.js';
 
 let repository: UserRepository;
 let prisma: PrismaClient;

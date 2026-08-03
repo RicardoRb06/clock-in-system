@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
 import { User } from "../model/User.js";
-import { UserRepository } from "../repository/UserRepository.js";
-import type { RegisterRequestDto } from "../dto/auth/request/RegisterRequest.js";
-import type { RegisterResponseDto } from "../dto/auth/response/RegisterResponse.js";
-import type { LoginRequestDto } from "../dto/auth/request/LoginRequest.js";
-import type { LoginResponseDto } from "../dto/auth/response/LoginResponse.js";
+import { UserRepository } from "../repository/user.repository.js";
+import type { RegisterRequestDto } from "../dto/auth/request/register.request.js";
+import type { RegisterResponseDto } from "../dto/auth/response/register.response.js";
+import type { LoginRequestDto } from "../dto/auth/request/login.request.js";
+import type { LoginResponseDto } from "../dto/auth/response/login.response.js";
 import jwt from 'jsonwebtoken';
 import { env } from "../config/env.js";
 

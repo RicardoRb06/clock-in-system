@@ -1,6 +1,6 @@
 import express from 'express';
 import "dotenv/config";
-import { ErrorMiddleware } from './middlewares/ErrorMiddleware.js';
+import { ErrorMiddleware } from './middlewares/error.middleware.js';
 import { routes } from './routes/routes.js'
 
 const app = express();
