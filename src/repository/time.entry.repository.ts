@@ -44,4 +44,14 @@ export class TimeEntryRepository {
             clockOut: entry.clockOut ? entry.clockOut.toISOString() : null
         }));
     }
+
+    public async hasOpenTimeEntry(userId: string): Promise<boolean> {
+        const openEntry = await this.prisma.timeEntry.findFirst({
+            where: {
+                userId: userId,
+                clockOut: null
+            }
+        });
+        return !!openEntry;
+    }
 }
