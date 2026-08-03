@@ -29,5 +29,5 @@ model auditLog {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("audit_log")
+  @@map("audit_logs")
 }
