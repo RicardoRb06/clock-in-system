@@ -38,7 +38,7 @@ describe("UserRepository", () => {
     it("should delete a user", async () => {
         const user = makeUser({name: "Ricardo"});
         await repository.save(user);
-        await repository.delete(user);
+        await repository.delete(user.id);
         const foundUser = await repository.findByName(user.name);
         expect(foundUser).toBeNull();
     });
