@@ -20,3 +20,15 @@ model user {
 
   @@map("users")
 }
+
+model time_entry {
+  id String @id
+  user_id String
+  user user @relation(fields: [user_id], references: [id])
+
+  clockIn DateTime
+  clockOut DateTime?
+
+  @@map("time_entries")
+  @@index([user_id, clockIn])
+}
