@@ -20,3 +20,14 @@ model user {
 
   @@map("users")
 }
+
+model auditLog {
+  id String @id @default(uuid())
+  userId String @map("user_id")
+  action String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("audit_log")
+}
