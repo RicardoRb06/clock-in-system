@@ -1,10 +1,19 @@
+export enum ACTION {
+    CLOCK_IN = "Registro de entrada",
+    CLOCK_OUT = "Registro de saída",
+    CREATE_USER = "Criar usuário",
+    USER_CREATED = "Usuário criado",
+    DELETE_USER = "Deletar usuário",
+    GENERATE_REPORT = "Gerar relatório"
+}
+
 export class AuditLog {
     private _id: string;
     private _userId: string;
-    private _action: string;
+    private _action: ACTION;
     private _dateHour: Date;
 
-    constructor(id: string, userId: string, action: string) {
+    constructor(id: string, userId: string, action: ACTION) {
         this._id = id;
         this._userId = userId;
         this._action = action;
@@ -19,7 +28,7 @@ export class AuditLog {
         return this._userId;
     }
 
-    public get action(): string {
+    public get action(): ACTION {
         return this._action;
     }
 
