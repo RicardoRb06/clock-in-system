@@ -45,7 +45,7 @@ export class TimeEntryRepository {
         }));
     }
 
-    public async findOpenTimeEntryByUserId(userId: string): Promise<TimeEntry | null> {
+    public async findOpenTimeEntryByUserId(userId: string): Promise<TimeEntry[] | null> {
         const openEntries = await this.prisma.timeEntry.findMany({
             where: {
                 userId: userId,
@@ -58,6 +58,6 @@ export class TimeEntryRepository {
             userId: entry.userId,
             clockIn: entry.clockIn.toISOString(),
             clockOut: null
-        }))[0] || null;
+        })) || null;
     }
 }
