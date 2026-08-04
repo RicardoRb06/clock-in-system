@@ -45,13 +45,19 @@ export class TimeEntryRepository {
         }));
     }
 
-    public async hasOpenTimeEntry(userId: string): Promise<boolean> {
-        const openEntry = await this.prisma.timeEntry.findFirst({
+    public async findOpenTimeEntryByUserId(userId: string): Promise<TimeEntry | null> {
+        const openEntries = await this.prisma.timeEntry.findMany({
             where: {
                 userId: userId,
                 clockOut: null
             }
         });
-        return !!openEntry;
+
+        return openEntries.map(entry => TimeEntry.fromPersistence({
+            id: entry.id,
+            userId: entry.userId,
+            clockIn: entry.clockIn.toISOString(),
+            clockOut: null
+        }))[0] || null;
     }
 }
