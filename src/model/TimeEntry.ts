@@ -15,6 +15,10 @@ export class TimeEntry {
         return this._id;
     }
 
+    public set id(id: string) {
+        this._id = id;
+    }
+
     public get userId(): string {
         return this._userId;
     }
