@@ -31,6 +31,10 @@ export class TimeEntry {
         return this._clockIn;
     }
 
+    public set clockIn(clockIn: Date) {
+        this._clockIn = clockIn;
+    }
+
     public get clockOut(): Date | null {
         return this._clockOut;
     }
