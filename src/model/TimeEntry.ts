@@ -23,6 +23,10 @@ export class TimeEntry {
         return this._userId;
     }
 
+    public set userId(userId: string) {
+        this._userId = userId;
+    }
+
     public get clockIn(): Date {
         return this._clockIn;
     }
