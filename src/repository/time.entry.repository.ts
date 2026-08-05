@@ -33,6 +33,9 @@ export class TimeEntryRepository {
                 clockIn: {
                     gte: startDate,
                     lte: endDate
+                },
+                clockOut: {
+                    not: null
                 }
             }
         });
