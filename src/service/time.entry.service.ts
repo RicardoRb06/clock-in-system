@@ -1,10 +1,6 @@
 import { TimeEntryRepository } from "../repository/time.entry.repository.js";
 import { TimeEntry } from "../model/TimeEntry.js";
 
-type ClockIn = {
-    userId: string;
-};
-
 type Output = {
     success: boolean;
     error?: string;
