@@ -2,11 +2,15 @@ import bcrypt from "bcryptjs";
 import { User } from "../model/User.js";
 import { UserRepository } from "../repository/user.repository.js";
 import type { RegisterRequestDto } from "../dto/auth/request/register.request.js";
-import type { RegisterResponseDto } from "../dto/auth/response/register.response.js";
 import type { LoginRequestDto } from "../dto/auth/request/login.request.js";
-import type { LoginResponseDto } from "../dto/auth/response/login.response.js";
 import jwt from 'jsonwebtoken';
 import { env } from "../config/env.js";
+
+type Output = {
+    success: boolean;
+    token?: string;
+    error?: string;
+};
 
 export class AuthService {
 
@@ -16,12 +20,11 @@ export class AuthService {
         this.userRepository = userRepository;
     }
 
-    public async register(request: RegisterRequestDto): Promise<RegisterResponseDto> {
+    public async register(request: RegisterRequestDto): Promise<Output> {
 
         if(await this.userRepository.existsByName(request.name)) {
             return { 
                 success: false,
-                token: null,
                 error: "Nome de usuário já existe"
             }
         }
@@ -40,18 +43,16 @@ export class AuthService {
         return { 
             success: true,
             token: jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' }),
-            error: null
          };
     }
 
-    public async login(request: LoginRequestDto): Promise<LoginResponseDto> {
+    public async login(request: LoginRequestDto): Promise<Output> {
 
         const user = await this.userRepository.findByName(request.name);
         
         if (!user) {
             return { 
                 success: false,
-                token: null,
                 error: "Usuário não encontrado"
             };
         }
@@ -61,7 +62,6 @@ export class AuthService {
         if (!isMatch) {
             return { 
                 success: false,
-                token: null,
                 error: "Credenciais incorretas"
             };
         }
@@ -75,7 +75,6 @@ export class AuthService {
         return { 
             success: true,
             token: jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' }),
-            error: null
          };
     }
 }
