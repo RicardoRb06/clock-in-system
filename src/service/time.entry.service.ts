@@ -15,13 +15,13 @@ export class TimeEntryService {
     }
 
     public async clockIn(data: { userId: string }): Promise<Output> {
-        try{
-            const hasOpenEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(data.userId);
-        } catch (error) {
+        const openEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(data.userId);
+            
+        if (!openEntry) {
             return {
                 success: false,
                 error: "Já existe um registro de ponto aberto para este usuário."
-            }
+            };
         }
 
         const timeEntry = new TimeEntry(data.userId, new Date());
