@@ -14,14 +14,22 @@ export class TimeEntryService {
         this.timeEntryRepository = timeEntryRepository;
     }
 
-    public async clockIn(request: ClockIn): Promise<void> {
-        const hasOpenEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(request.userId);
-        if (!hasOpenEntry) {
-            throw new Error("Já existe um registro de ponto aberto para este usuário.");
+    public async clockIn(request: ClockIn): Promise<Output> {
+        try{
+            const hasOpenEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(request.userId);
+        } catch (error) {
+            return {
+                success: false,
+                error: "Já existe um registro de ponto aberto para este usuário."
+            }
         }
 
         const timeEntry = new TimeEntry(request.userId, new Date());
         await this.timeEntryRepository.create(timeEntry);
+
+        return {
+            success: true
+        };
     }
 
     public async clockOut(request: ClockIn): Promise<Output> {
