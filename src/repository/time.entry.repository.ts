@@ -19,10 +19,14 @@ export class TimeEntryRepository {
         });
     }
 
-    public async updateClockOut(id: string, clockOut: Date): Promise<void> {
+    public async update(timeEntry: TimeEntry): Promise<void> {
         await this.prisma.timeEntry.update({
-            where: { id },
-            data: { clockOut: clockOut }
+            where: { id: timeEntry.id },
+            data: { 
+                userId: timeEntry.userId,
+                clockIn: timeEntry.clockIn,
+                clockOut: timeEntry.clockOut
+            }
         });
     }
 
