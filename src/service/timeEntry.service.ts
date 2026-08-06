@@ -1,4 +1,4 @@
-import { TimeEntryRepository } from "../repository/time.entry.repository.js";
+import { TimeEntryRepository } from "../repository/timeEntry.repository.js";
 import { TimeEntry } from "../model/TimeEntry.js";
 
 type ClockIn = {
