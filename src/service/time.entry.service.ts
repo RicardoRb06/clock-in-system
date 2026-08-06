@@ -14,9 +14,9 @@ export class TimeEntryService {
         this.timeEntryRepository = timeEntryRepository;
     }
 
-    public async clockIn(request: ClockIn): Promise<Output> {
+    public async clockIn(data: { userId: string }): Promise<Output> {
         try{
-            const hasOpenEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(request.userId);
+            const hasOpenEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(data.userId);
         } catch (error) {
             return {
                 success: false,
@@ -24,7 +24,7 @@ export class TimeEntryService {
             }
         }
 
-        const timeEntry = new TimeEntry(request.userId, new Date());
+        const timeEntry = new TimeEntry(data.userId, new Date());
         await this.timeEntryRepository.create(timeEntry);
 
         return {
@@ -32,8 +32,8 @@ export class TimeEntryService {
         };
     }
 
-    public async clockOut(request: ClockIn): Promise<Output> {
-        const openEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(request.userId);
+    public async clockOut(data: { userId: string }): Promise<Output> {
+        const openEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(data.userId);
         
         if(!openEntry) {
             return {
