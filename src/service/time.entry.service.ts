@@ -5,6 +5,11 @@ type ClockIn = {
     userId: string;
 };
 
+type Output = {
+    success: boolean;
+    error?: string;
+};
+
 export class TimeEntryService {
 
     private timeEntryRepository: TimeEntryRepository;
@@ -23,16 +28,21 @@ export class TimeEntryService {
         await this.timeEntryRepository.create(timeEntry);
     }
 
-    public async clockOut(request: ClockIn): Promise<void> {
+    public async clockOut(request: ClockIn): Promise<Output> {
         const openEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(request.userId);
         
         if(!openEntry) {
-            throw new Error("Não existe um registro de ponto aberto para este usuário.");
+            return {
+                success: false,
+                error: "Não existe um registro de ponto aberto para este usuário."
+            }
         }
-        if (openEntry.length > 1) {
-            throw new Error("Há múltiplos registros de ponto abertos para este usuário.");
-        }
+        
+        openEntry.clockOut = new Date();
+        await this.timeEntryRepository.update(openEntry);
 
-        await this.timeEntryRepository.updateClockOut(openEntry[0].id, new Date());
+        return {
+            success: true
+        };
     }
 }
