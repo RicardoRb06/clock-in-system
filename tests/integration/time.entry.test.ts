@@ -1,6 +1,6 @@
 import { beforeAll, afterAll, afterEach, describe, it, expect } from 'vitest';
 import { startDatabase, stopDatabase } from '../helpers/setupDB.js';
-import { TimeEntryRepository } from '../../src/repository/timeEntry.repository.js';
+import { TimeEntryRepository } from '../../src/repository/time-entry.repository.js';
 import { UserRepository } from '../../src/repository/user.repository.js';
 import type { PrismaClient } from '@prisma/client';
 import { makeTimeEntry } from '../factory/time.entry.factory.js';
