@@ -1,8 +1,9 @@
 import { TimeEntryRepository } from "../repository/time-entry.repository.js";
 import { TimeEntry } from "../model/TimeEntry.js";
 
-type ClockIn = {
-    userId: string;
+type Output = {
+    success: boolean;
+    error?: string;
 };
 
 export class TimeEntryService {
@@ -13,26 +14,39 @@ export class TimeEntryService {
         this.timeEntryRepository = timeEntryRepository;
     }
 
-    public async clockIn(request: ClockIn): Promise<void> {
-        const hasOpenEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(request.userId);
-        if (!hasOpenEntry) {
-            throw new Error("Já existe um registro de ponto aberto para este usuário.");
+    public async clockIn(data: { userId: string }): Promise<Output> {
+        const openEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(data.userId);
+            
+        if (!openEntry) {
+            return {
+                success: false,
+                error: "Já existe um registro de ponto aberto para este usuário."
+            };
         }
 
-        const timeEntry = new TimeEntry(request.userId, new Date());
+        const timeEntry = new TimeEntry(data.userId, new Date());
         await this.timeEntryRepository.create(timeEntry);
+
+        return {
+            success: true
+        };
     }
 
-    public async clockOut(request: ClockIn): Promise<void> {
-        const openEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(request.userId);
+    public async clockOut(data: { userId: string }): Promise<Output> {
+        const openEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(data.userId);
         
         if(!openEntry) {
-            throw new Error("Não existe um registro de ponto aberto para este usuário.");
+            return {
+                success: false,
+                error: "Não existe um registro de ponto aberto para este usuário."
+            }
         }
-        if (openEntry.length > 1) {
-            throw new Error("Há múltiplos registros de ponto abertos para este usuário.");
-        }
+        
+        openEntry.clockOut = new Date();
+        await this.timeEntryRepository.update(openEntry);
 
-        await this.timeEntryRepository.updateClockOut(openEntry[0].id, new Date());
+        return {
+            success: true
+        };
     }
 }

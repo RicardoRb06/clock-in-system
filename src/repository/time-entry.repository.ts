@@ -19,10 +19,14 @@ export class TimeEntryRepository {
         });
     }
 
-    public async updateClockOut(id: string, clockOut: Date): Promise<void> {
+    public async update(timeEntry: TimeEntry): Promise<void> {
         await this.prisma.timeEntry.update({
-            where: { id },
-            data: { clockOut: clockOut }
+            where: { id: timeEntry.id },
+            data: { 
+                userId: timeEntry.userId,
+                clockIn: timeEntry.clockIn,
+                clockOut: timeEntry.clockOut
+            }
         });
     }
 
@@ -33,6 +37,9 @@ export class TimeEntryRepository {
                 clockIn: {
                     gte: startDate,
                     lte: endDate
+                },
+                clockOut: {
+                    not: null
                 }
             }
         });
@@ -40,24 +47,19 @@ export class TimeEntryRepository {
         return timeEntries.map(entry => TimeEntry.fromPersistence({
             id: entry.id,
             userId: entry.userId,
-            clockIn: entry.clockIn.toISOString(),
-            clockOut: entry.clockOut ? entry.clockOut.toISOString() : null
+            clockIn: entry.clockIn,
+            clockOut: entry.clockOut ? entry.clockOut : null
         }));
     }
 
-    public async findOpenTimeEntryByUserId(userId: string): Promise<TimeEntry[] | null> {
-        const openEntries = await this.prisma.timeEntry.findMany({
+    public async findOpenTimeEntryByUserId(userId: string): Promise<TimeEntry | null> {
+        const openEntry = await this.prisma.timeEntry.findFirst({
             where: {
                 userId: userId,
                 clockOut: null
             }
         });
 
-        return openEntries.map(entry => TimeEntry.fromPersistence({
-            id: entry.id,
-            userId: entry.userId,
-            clockIn: entry.clockIn.toISOString(),
-            clockOut: null
-        })) || null;
+        return openEntry ? TimeEntry.fromPersistence(openEntry) : null;
     }
 }
