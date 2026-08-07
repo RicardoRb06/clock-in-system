@@ -1,5 +1,5 @@
-import { timeEntryRequestSchema } from "../dto/time.entry/request/timeEntry.request.js";
-import type { TimeEntryService } from "../service/time.entry.service.js";
+import { TimeEntryRequestSchema } from "../dto/time-entry/request/time-entry.request.js";
+import type { TimeEntryService } from "../service/time-entry.service.js";
 import type { Request, Response } from 'express';
 import { z } from 'zod';
 
@@ -12,7 +12,7 @@ export class TimeEntryController {
     }
 
     async clockIn(req: Request, res: Response) {
-        const dto = timeEntryRequestSchema.safeParse(req.body);
+        const dto = TimeEntryRequestSchema.safeParse(req.body);
 
         if (!dto.success) {
             return res.status(400).json({ 
@@ -37,7 +37,7 @@ export class TimeEntryController {
     }
 
     async clockOut(req: Request, res: Response) {
-        const dto = timeEntryRequestSchema.safeParse(req.body);
+        const dto = TimeEntryRequestSchema.safeParse(req.body);
 
         if (!dto.success) {
             return res.status(400).json({ 
