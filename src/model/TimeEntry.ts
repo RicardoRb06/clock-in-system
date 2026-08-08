@@ -1,0 +1,63 @@
+export class TimeEntry {
+    private _id: string;
+    private _userId: string;
+    private _clockIn: Date;
+    private _clockOut: Date | null;
+
+    constructor(userId: string, clockIn: Date) {
+        this._id = crypto.randomUUID();
+        this._userId = userId;
+        this._clockIn = clockIn;
+        this._clockOut = null;
+    }
+
+    public get id(): string {
+        return this._id;
+    }
+
+    public set id(id: string) {
+        this._id = id;
+    }
+
+    public get userId(): string {
+        return this._userId;
+    }
+
+    public set userId(userId: string) {
+        this._userId = userId;
+    }
+
+    public get clockIn(): Date {
+        return this._clockIn;
+    }
+
+    public set clockIn(clockIn: Date) {
+        this._clockIn = clockIn;
+    }
+
+    public get clockOut(): Date | null {
+        return this._clockOut;
+    }
+
+    public set clockOut(clockOut: Date | null) {
+        this._clockOut = clockOut;
+    }
+
+    public getDuration(): number | null {
+        if(this._clockOut === null) {
+            return null;
+        }
+
+        const duration = (this._clockOut.getTime() - this._clockIn.getTime()) / 1000;
+
+        return duration;
+    }
+
+    public static fromPersistence(data: { id: string, userId: string, clockIn: Date, clockOut: Date | null }): TimeEntry {
+        const timeEntry = new TimeEntry(data.userId, new Date(data.clockIn));
+        timeEntry._id = data.id;
+        timeEntry._clockOut = data.clockOut ? new Date(data.clockOut) : null;   
+
+        return timeEntry;
+    }
+}

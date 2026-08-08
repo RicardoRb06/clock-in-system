@@ -27,7 +27,11 @@ export class AuthMiddleware {
             throw new Error("TOKEN_MALFORMED: O token enviado não segue o formato Bearer.");
         }
 
-        const decoded = jwt.verify(token, this.jwtSecret) as unknown as AuthJwtPayload;
+        const decoded = jwt.verify(token, this.jwtSecret);
+
+        if(typeof decoded !== 'object' || !decoded.id || !decoded.name || !decoded.role) {
+            throw new Error("TOKEN_INVALID: O token enviado é inválido.");
+        }
 
         req.user = {
             id: decoded.id,
