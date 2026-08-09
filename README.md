@@ -38,6 +38,34 @@ src/ <br>
 ├── middlewares<br>
 ├── dto
 
+## Como rodar o projeto
+
+1. Clone o repositório
+```
+git clone https://github.com/RicardoRb06/clock-in-system.git
+cd clock-in-system
+```
+2. Instale as dependências
+```
+pnpm install
+```
+3. Crie um arquivo `.env` na raiz do projeto
+```
+DATABASE_URL=""
+JWT_SECRET=""
+```
+4. Execute as migrations
+```
+pnpm prisma migrate dev
+```
+5. Gere o client do Prisma
+```
+pnpm prisma migrate dev
+```
+6. Inicie o servidor
+```
+pnpm dev
+```
 ## Endpoints
 - POST auth/register
 - POST auth/login
