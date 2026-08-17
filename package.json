@@ -21,6 +21,7 @@
   "type": "module",
   "devDependencies": {
     "@testcontainers/postgresql": "^12.0.4",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.1.2",
