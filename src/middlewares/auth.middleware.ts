@@ -12,7 +12,12 @@ type AuthenticatedRequest = Request & {
 };
 
 export class AuthMiddleware {
-    constructor(private readonly jwtSecret: string) {}
+
+    private readonly jwtSecret: string;
+
+    constructor(jwtSecret: string) {
+        this.jwtSecret = jwtSecret;
+    }
 
     public validate = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
         const authHeader = req.headers.authorization;
