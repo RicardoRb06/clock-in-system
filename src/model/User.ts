@@ -1,7 +1,8 @@
 export enum ROLES {
     USER = "user",
     ADMIN = "admin",
-    MODERATOR = "moderator"    
+    MODERATOR = "moderator",
+    TIME_ENTRY = "time entry",
 }
 
 export enum CATEGORY {
