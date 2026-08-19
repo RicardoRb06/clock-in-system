@@ -15,7 +15,8 @@ export class UserRepository {
             name: user.name,
             passwordHash: user.passwordHash,
             isActive: user.isActive,
-            role: user.role
+            role: user.role,
+            category: user.category
         }});
     }
 
@@ -26,7 +27,8 @@ export class UserRepository {
                 name: user.name,
                 passwordHash: user.passwordHash,
                 isActive: user.isActive,
-                roles: user.role
+                roles: user.role,
+                category: user.category
             }
         });
     }
