@@ -7,8 +7,8 @@ async function main() {
     const ModeratorPasswordHash = await bcrypt.hash(env.MODERATOR_PASSWORD, 10);
     const TimeClockPasswordHash = await bcrypt.hash(env.TIME_CLOCK_PASSWORD, 10);
 
-    const moderator = new User("moderator", ModeratorPasswordHash);
-    const timeClock = new User("timeClock", TimeClockPasswordHash);
+    const moderator = new User(env.MODERATOR_NAME, ModeratorPasswordHash);
+    const timeClock = new User(env.TIME_CLOCK_NAME, TimeClockPasswordHash);
     moderator.role = ROLES.MODERATOR;
     timeClock.role = ROLES.TIME_CLOCK;
 
