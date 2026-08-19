@@ -9,6 +9,7 @@ const envSchema = z.object({
         .filter(boolean)
     ),
     MODERATOR_PASSWORD: z.string().min(1, "MODERATOR_PASSWORD: A senha do usuário moderador não foi carregada do arquivo .env."),
+    TIME_ENTRY_PASSWORD: z.string().min(1, "TIME_ENTRY_PASSWORD: A senha do usuário terminal de ponto não foi carregada do arquivo .env."),
 });
 
 export const env = envSchema.parse(process.env);
