@@ -90,7 +90,7 @@ export class User {
 
     public static fromPersistence(data: { id: string; name: string; passwordHash: string; isActive: boolean; role: string; category: string | null}): User {
         const user = new User(data.name, data.passwordHash, data.category as CATEGORY);
-        user._id = data.id;
+        user.id = data.id;
         user.isActive = data.isActive;
         user.role = data.role as ROLES;
         return user;
