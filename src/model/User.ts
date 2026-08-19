@@ -2,7 +2,7 @@ export enum ROLES {
     USER = "user",
     ADMIN = "admin",
     MODERATOR = "moderator",
-    TIME_ENTRY = "time clock",
+    TIME_CLOCK = "time clock",
 }
 
 export enum CATEGORY {
