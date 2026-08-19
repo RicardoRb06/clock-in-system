@@ -17,6 +17,7 @@ model User {
   passwordHash String @map("password_hash")
   isActive Boolean @default(true) @map("is_active")
   role String
+  category String?
 
   entries TimeEntry[]
 
