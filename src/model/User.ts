@@ -20,16 +20,16 @@ export class User {
     private _isWorking: boolean;
     private _isActive: boolean;
     private _role: ROLES;
-    private _category: CATEGORY;
+    private _category: CATEGORY | null;
 
-    constructor(name: string, passwordHash: string, roles: ROLES, category: CATEGORY) {
+    constructor(name: string, passwordHash: string, category?: CATEGORY) {
         this._id = crypto.randomUUID();
         this._name = name;
         this._passwordHash = passwordHash;
         this._isWorking = false;
         this._isActive = true;
-        this._role = roles;
-        this._category = category;
+        this._role = ROLES.USER;
+        this._category = category ?? null;
     }
 
     public get id(): string {
@@ -80,11 +80,11 @@ export class User {
         this._role = role;
     }
 
-    public get category(): CATEGORY {
+    public get category(): CATEGORY | null {
         return this._category;
     }
 
-    public set category(category: CATEGORY) {
+    public set category(category: CATEGORY | null) {
         this._category = category;
     }
 
