@@ -38,16 +38,10 @@ export class AuthService {
         
         await this.userRepository.save(user);
 
-        const payload = {
-            id: user.id,
-            name: user.name,
-            role: user.role
-        }
-
         return { 
             success: true,
             role: user.role,
-            token: jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' }),
+            token: this.generateToken(user),
          };
     }
 
@@ -71,16 +65,10 @@ export class AuthService {
             };
         }
 
-        const payload = {
-            id: user.id,
-            name: user.name,
-            role: user.role
-        }
-
         return { 
             success: true,
             role: user.role,
-            token: jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' }),
+            token: this.generateToken(user),
          };
     }
 }
