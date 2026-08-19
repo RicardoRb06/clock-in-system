@@ -7,7 +7,8 @@ const envSchema = z.object({
     .transform((val) => val.split(",")
         .map((origin) => origin.trim())
         .filter(boolean)
-    )
+    ),
+    MODERATOR_PASSWORD: z.string().min(1, "MODERATOR_PASSWORD: A senha do usuário moderador não foi carregada do arquivo .env."),
 });
 
 export const env = envSchema.parse(process.env);
