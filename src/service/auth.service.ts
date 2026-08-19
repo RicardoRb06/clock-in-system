@@ -21,7 +21,7 @@ export class AuthService {
 
     private generateToken(user: User){
         const payload = {id: user.id, name: user.name, role: user.role}
-        return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' },);
+        return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' });
     }
 
     public async register(data: { name: string; password: string }): Promise<Output> {
