@@ -6,6 +6,7 @@ import { env } from "../config/env.js";
 
 type Output = {
     success: boolean;
+    role?: string;
     token?: string;
     error?: string;
 };
@@ -16,6 +17,11 @@ export class AuthService {
 
     constructor(userRepository: UserRepository) {
         this.userRepository = userRepository;
+    }
+
+    private generateToken(user: User){
+        const payload = {id: user.id, name: user.name, role: user.role}
+        return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' },);
     }
 
     public async register(data: { name: string; password: string }): Promise<Output> {
@@ -40,6 +46,7 @@ export class AuthService {
 
         return { 
             success: true,
+            role: user.role,
             token: jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' }),
          };
     }
@@ -72,6 +79,7 @@ export class AuthService {
 
         return { 
             success: true,
+            role: user.role,
             token: jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' }),
          };
     }
