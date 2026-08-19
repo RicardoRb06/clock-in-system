@@ -8,7 +8,9 @@ const envSchema = z.object({
         .map((origin) => origin.trim())
         .filter(boolean)
     ),
+    MODERATOR_NAME: z.string().min(1, "MODERATOR_NAME: O nome do usuário moderador não foi carregada do arquivo .env."),
     MODERATOR_PASSWORD: z.string().min(1, "MODERATOR_PASSWORD: A senha do usuário moderador não foi carregada do arquivo .env."),
+    TIME_CLOCK_NAME: z.string().min(1, "TIME_CLOCK_NAME: O nome do usuário terminal de ponto não foi carregada do arquivo .env."),
     TIME_CLOCK_PASSWORD: z.string().min(1, "TIME_CLOCK_PASSWORD: A senha do usuário terminal de ponto não foi carregada do arquivo .env."),
 });
 
