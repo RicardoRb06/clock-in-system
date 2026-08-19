@@ -8,7 +8,8 @@ export enum CATEGORY {
     SOCCER_2D = "soccer 2D",
     LINE_CHASER = "line chaser",
     COMBAT = "combat",
-    SUMO = "sumo"
+    SUMO = "sumo",
+    MARKETING = "marketing"
 }
 
 export class User {
