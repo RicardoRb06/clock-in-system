@@ -13,8 +13,8 @@ export class AuditLog {
     private _action: ACTION;
     private _dateHour: Date;
 
-    constructor(id: string, userId: string, action: ACTION) {
-        this._id = id;
+    constructor(userId: string, action: ACTION) {
+        this._id = crypto.randomUUID();
         this._userId = userId;
         this._action = action;
         this._dateHour = new Date();
