@@ -20,7 +20,7 @@ model User {
 
   entries TimeEntry[]
 
-  auditLogs    auditLog[] 
+  auditLogs    AuditLog[] 
 
   @@map("users")
 }
@@ -37,14 +37,15 @@ model TimeEntry {
   @@index([userId, clockIn])
 }
 
-model auditLog {
+model AuditLog {
   id String @id @default(uuid())
   userId String @map("user_id")
   action String
   createdAt DateTime @default(now()) @map("created_at")
 
-  user user @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("audit_logs")
+}
 
 
