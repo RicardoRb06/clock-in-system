@@ -6,7 +6,7 @@ import { CorsMiddleware } from './middlewares/cors.middleware.js';
 import { env } from '../src/config/env.js';
 
 const app = express();
-const PORT = 8080;
+const PORT = env.PORT;
 
 const corsMiddleware = new CorsMiddleware(env.CORS_ALLOWED_ORIGINS);
 app.use(corsMiddleware.handler());

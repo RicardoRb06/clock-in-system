@@ -1,7 +1,16 @@
 export enum ROLES {
     USER = "user",
     ADMIN = "admin",
-    MODERATOR = "moderator"    
+    MODERATOR = "moderator",
+    TIME_CLOCK = "time clock",
+}
+
+export enum CATEGORY {
+    SOCCER_2D = "soccer 2D",
+    LINE_CHASER = "line chaser",
+    COMBAT = "combat",
+    SUMO = "sumo",
+    MARKETING = "marketing"
 }
 
 export class User {
@@ -11,14 +20,16 @@ export class User {
     private _isWorking: boolean;
     private _isActive: boolean;
     private _role: ROLES;
+    private _category: CATEGORY | null;
 
-    constructor(name: string, passwordHash: string) {
+    constructor(name: string, passwordHash: string, category?: CATEGORY) {
         this._id = crypto.randomUUID();
         this._name = name;
         this._passwordHash = passwordHash;
         this._isWorking = false;
         this._isActive = true;
         this._role = ROLES.USER;
+        this._category = category ?? null;
     }
 
     public get id(): string {
@@ -69,9 +80,17 @@ export class User {
         this._role = role;
     }
 
-    public static fromPersistence(data: { id: string; name: string; passwordHash: string; isActive: boolean; role: string }): User {
-        const user = new User(data.name, data.passwordHash);
-        user._id = data.id;
+    public get category(): CATEGORY | null {
+        return this._category;
+    }
+
+    public set category(category: CATEGORY | null) {
+        this._category = category;
+    }
+
+    public static fromPersistence(data: { id: string; name: string; passwordHash: string; isActive: boolean; role: string; category: string | null}): User {
+        const user = new User(data.name, data.passwordHash, data.category as CATEGORY);
+        user.id = data.id;
         user.isActive = data.isActive;
         user.role = data.role as ROLES;
         return user;

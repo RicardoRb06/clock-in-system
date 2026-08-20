@@ -1,5 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { User } from "../model/User.js";
+import { type Result, ok, err } from '../utils/result.js';
+import { mapUserError } from "../utils/prisma.erros.js";
 
 export class UserRepository {
 
@@ -9,14 +11,20 @@ export class UserRepository {
         this.prisma = prisma;
     }
 
-    public async save(user: User) {
-        await this.prisma.user.create({ data: {
-            id: user.id,
-            name: user.name,
-            passwordHash: user.passwordHash,
-            isActive: user.isActive,
-            role: user.role
-        }});
+    public async save(user: User): Promise<Result<void>> {
+        try{
+            await this.prisma.user.create({ data: {
+                id: user.id,
+                name: user.name,
+                passwordHash: user.passwordHash,
+                isActive: user.isActive,
+                role: user.role,
+                category: user.category
+            }});
+            return ok(undefined);
+        } catch (e) {
+            return err(mapUserError(e, user));
+        }
     }
 
     public async update(user: User) {
@@ -26,7 +34,8 @@ export class UserRepository {
                 name: user.name,
                 passwordHash: user.passwordHash,
                 isActive: user.isActive,
-                roles: user.role
+                roles: user.role,
+                category: user.category
             }
         });
     }
@@ -35,12 +44,19 @@ export class UserRepository {
         await this.prisma.user.delete({ where: { id } });
     }
 
-    public async findByName(name: string) {
-        const userResponse = await this.prisma.user.findUnique({ where: { name } });
-        if(!userResponse) {
-            return null;
+    public async findByName(name: string): Promise<Result<User | null, Error>> {
+        try{
+            const userResponse = await this.prisma.user.findUnique({ where: { name } });
+
+            if(!userResponse){
+                return ok(null);
+            }
+
+            const user = User.fromPersistence(userResponse);
+            return ok(user);
+        } catch(e){
+            return err(e as Error);
         }
-        return User.fromPersistence(userResponse);
     }
 
     public async findById(id: string) {
