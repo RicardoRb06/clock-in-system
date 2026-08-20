@@ -17,7 +17,9 @@ export class LogRepository {
         }});
     }
 
-    public async getAll(id: string) {
+    public async getAll() {
         await this.prisma.auditLog.findMany();
     }
+
+    
 }
