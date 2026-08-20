@@ -4,8 +4,6 @@ import { UserRepository } from "../repository/user.repository.js";
 import jwt from 'jsonwebtoken';
 import { env } from "../config/env.js";
 import { DuplicateUserError } from "../errors/DuplicateUserError.js";
-import { ErrorMiddleware } from '../middlewares/error.middleware';
-import { string, success } from 'zod';
 
 type Output = 
     | { success: boolean; role: string; token: string; }
