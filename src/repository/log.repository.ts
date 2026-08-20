@@ -17,10 +17,6 @@ export class LogRepository {
         }});
     }
 
-    public async delete(id: string) {
-        await this.prisma.auditLog.delete({ where: { id } });
-    }
-
     public async getAll(id: string) {
         await this.prisma.auditLog.findMany();
     }
