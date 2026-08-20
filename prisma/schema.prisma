@@ -38,7 +38,7 @@ model TimeEntry {
 }
 
 model AuditLog {
-  id String @id @default(uuid())
+  id String @id
   userId String @map("user_id")
   action String
   createdAt DateTime @default(now()) @map("created_at")
