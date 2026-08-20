@@ -44,23 +44,25 @@ export class AuthService {
     }
 
     public async login(data: { name: string; password: string }): Promise<Output> {
+        const response = await this.userRepository.findByName(data.name);
 
-        const user = await this.userRepository.findByName(data.name);
-        
-        if (!user) {
-            return { 
-                success: false,
-                error: "Usuário não encontrado"
-            };
+        if (!response.success) {
+            return { success: false, error: "Não foi possível realizar o login" };
+        } 
+
+        const user = response.data
+
+        let password;
+        if(user) {
+            password = user.passwordHash;
+        } else {
+            password = await bcrypt.hash("a", 10);
         }
-
-        const isMatch = await bcrypt.compare(data.password, user.passwordHash);
         
-        if (!isMatch) {
-            return { 
-                success: false,
-                error: "Credenciais incorretas"
-            };
+        const isMatch = await bcrypt.compare(data.password, password);
+
+        if(!user || !isMatch) {
+            return { success: false, error: "Usuário ou senha inválidos"}
         }
 
         return { 
