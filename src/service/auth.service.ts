@@ -29,15 +29,10 @@ export class AuthService {
         const result = await this.userRepository.save(user);
            
         if(!result.success) {
-            let errorMessage;
             if(result.error instanceof DuplicateUserError){
-                errorMessage = result.error.message;
+                return { success: false, error: result.error.message};
             } else {
-                errorMessage = "Não foi possível realizar o cadastro. Tente novamente mais tarde."
-            }
-            return {
-                success: false,
-                error: errorMessage,
+                return { success: false, error: "Não foi possível realizar o cadastro. Tente novamente mais tarde."};
             }
         }
 
