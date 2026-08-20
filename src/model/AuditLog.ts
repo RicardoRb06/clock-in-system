@@ -23,7 +23,11 @@ export class AuditLog {
     public get id(): string {
         return this._id;
     }
-    
+
+    public set id(id: string) {
+        this._id = id;
+    }
+
     public get userId(): string {
         return this._userId;
     }
@@ -34,6 +38,18 @@ export class AuditLog {
 
     public get dateHour(): Date {
         return this._dateHour;
+    }
+
+    public set dateHour(dateHour: Date) {
+        this._dateHour = dateHour;
+    }
+
+    public fromPersistance(data: { id: string, userId: string, action: ACTION, dateHour: Date }): AuditLog {
+        const log = new AuditLog(data.userId, data.action);
+        log.id = data.id;
+        log.dateHour = data.dateHour;
+
+        return log;
     }
 
 }
