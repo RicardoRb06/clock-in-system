@@ -44,7 +44,7 @@ export class AuditLog {
         this._dateHour = dateHour;
     }
 
-    public fromPersistance(data: { id: string, userId: string, action: ACTION, dateHour: Date }): AuditLog {
+    public static fromPersistance(data: { id: string, userId: string, action: ACTION, dateHour: Date }): AuditLog {
         const log = new AuditLog(data.userId, data.action);
         log.id = data.id;
         log.dateHour = data.dateHour;
