@@ -5,13 +5,12 @@ import jwt from 'jsonwebtoken';
 import { env } from "../config/env.js";
 import { DuplicateUserError } from "../errors/DuplicateUserError.js";
 import { ErrorMiddleware } from '../middlewares/error.middleware';
+import { string, success } from 'zod';
 
-type Output = {
-    success: boolean;
-    role?: string;
-    token?: string;
-    error?: string;
-};
+type Output = 
+    | { success: boolean; role: string; token: string; }
+    | { success: false; error: string; }
+
 
 export class AuthService {
 
