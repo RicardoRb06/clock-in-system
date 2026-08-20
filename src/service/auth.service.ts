@@ -3,6 +3,8 @@ import { User } from "../model/User.js";
 import { UserRepository } from "../repository/user.repository.js";
 import jwt from 'jsonwebtoken';
 import { env } from "../config/env.js";
+import { DuplicateUserError } from "../errors/DuplicateUserError.js";
+import { ErrorMiddleware } from '../middlewares/error.middleware';
 
 type Output = {
     success: boolean;
@@ -25,24 +27,28 @@ export class AuthService {
     }
 
     public async register(data: { name: string; password: string }): Promise<Output> {
-
-        if(await this.userRepository.existsByName(data.name)) {
-            return { 
-                success: false,
-                error: "Nome de usuário já existe"
-            }
-        }
-
         const hash = await bcrypt.hash(data.password, 10);
         const user = new User(data.name, hash);
-        
-        await this.userRepository.save(user);
+        const result = await this.userRepository.save(user);
+           
+        if(!result.success) {
+            let errorMessage;
+            if(result.error instanceof DuplicateUserError){
+                errorMessage = result.error.message;
+            } else {
+                errorMessage = "Não foi possível realizar o cadastro. Tente novamente mais tarde."
+            }
+            return {
+                success: false,
+                error: errorMessage,
+            }
+        }
 
         return { 
             success: true,
             role: user.role,
             token: this.generateToken(user),
-         };
+        };
     }
 
     public async login(data: { name: string; password: string }): Promise<Output> {
