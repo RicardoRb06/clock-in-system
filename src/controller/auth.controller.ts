@@ -63,7 +63,7 @@ export class AuthController {
 
         res.cookie(AUTH_COOKIE_NAME, result.token, AUTH_COOKIE_OPTIONS);
 
-        return res.status(201).json({
+        return res.status(200).json({
             success: true,
             tokenType: 'Bearer'
         });
