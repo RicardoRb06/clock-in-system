@@ -1,6 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
 import { User } from "../model/User.js";
-import { Result, ok, err } from '../utils/result.js';
+import { type Result, ok, err } from '../utils/result.js';
 import { mapUserError } from "../utils/prisma.erros.js";
 
 export class UserRepository {
