@@ -3,7 +3,7 @@ import { User } from "../model/User.js";
 import { UserRepository } from "../repository/user.repository.js";
 import jwt from 'jsonwebtoken';
 import { env } from "../config/env.js";
-import { DuplicateUserError } from "../errors/DuplicateUserError.js";
+import { ConflictError } from "../errors/ConflictError.js";
 
 type Output = 
     | { success: boolean; role: string; token: string; }
@@ -29,7 +29,7 @@ export class AuthService {
         const result = await this.userRepository.save(user);
            
         if(!result.success) {
-            if(result.error instanceof DuplicateUserError){
+            if(result.error instanceof ConflictError){
                 return { success: false, error: result.error.message};
             } else {
                 return { success: false, error: "Não foi possível realizar o cadastro. Tente novamente mais tarde."};
