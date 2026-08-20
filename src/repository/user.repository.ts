@@ -1,5 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { User } from "../model/User.js";
+import { Result, ok, err } from '../utils/result.js';
+import { mapUserError } from "../utils/prisma.erros.js";
 
 export class UserRepository {
 
@@ -9,15 +11,20 @@ export class UserRepository {
         this.prisma = prisma;
     }
 
-    public async save(user: User) {
-        await this.prisma.user.create({ data: {
-            id: user.id,
-            name: user.name,
-            passwordHash: user.passwordHash,
-            isActive: user.isActive,
-            role: user.role,
-            category: user.category
-        }});
+    public async save(user: User): Promise<Result<void>> {
+        try{
+            await this.prisma.user.create({ data: {
+                id: user.id,
+                name: user.name,
+                passwordHash: user.passwordHash,
+                isActive: user.isActive,
+                role: user.role,
+                category: user.category
+            }});
+            return ok(undefined);
+        } catch (e) {
+            return err(mapUserError(e, user));
+        }
     }
 
     public async update(user: User) {
