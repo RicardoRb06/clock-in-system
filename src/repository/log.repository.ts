@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
+import type { AuditLog } from "../model/AuditLog.js";
 
 export class LogRepository {
     private readonly prisma: PrismaClient;
@@ -7,5 +8,20 @@ export class LogRepository {
         this.prisma = prisma;
     }
 
-    public async getAll(id: string) {}
+    public async save(log: AuditLog) {
+        await this.prisma.auditLog.create({ data: {
+            id: log.id,
+            userId: log.userId,
+            action: log.action,
+            dateHour: log.dateHour
+        }});
+    }
+
+    public async delete(id: string) {
+        await this.prisma.auditLog.delete({ where: { id } });
+    }
+
+    public async getAll(id: string) {
+        await this.prisma.auditLog.findMany();
+    }
 }
