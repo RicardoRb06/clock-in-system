@@ -12,7 +12,12 @@ type AuthenticatedRequest = Request & {
 };
 
 export class AuthMiddleware {
-    constructor(private readonly jwtSecret: string) {}
+
+    private readonly jwtSecret: string;
+
+    constructor(jwtSecret: string) {
+        this.jwtSecret = jwtSecret;
+    }
 
     public validate = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
         const authHeader = req.headers.authorization;
@@ -27,7 +32,11 @@ export class AuthMiddleware {
             throw new Error("TOKEN_MALFORMED: O token enviado não segue o formato Bearer.");
         }
 
-        const decoded = jwt.verify(token, this.jwtSecret) as unknown as AuthJwtPayload;
+        const decoded = jwt.verify(token, this.jwtSecret);
+
+        if(typeof decoded !== 'object' || !decoded.id || !decoded.name || !decoded.role) {
+            throw new Error("TOKEN_INVALID: O token enviado é inválido.");
+        }
 
         req.user = {
             id: decoded.id,

@@ -11,16 +11,30 @@ datasource db {
   provider = "postgresql"
 }
 
-model user {
-  id String @id @default(uuid())
+model User {
+  id String @id
   name String @unique
-  passwordHash String
-  isActive Boolean @default(true)
-  roles String
+  passwordHash String @map("password_hash")
+  isActive Boolean @default(true) @map("is_active")
+  role String
+
+  entries TimeEntry[]
 
   auditLogs    auditLog[] 
 
   @@map("users")
+}
+
+model TimeEntry {
+  id String @id
+  userId String @map("user_id")
+  user User @relation(fields: [userId], references: [id])
+
+  clockIn DateTime @map("clock_in")
+  clockOut DateTime? @map("clock_out")
+
+  @@map("time_entries")
+  @@index([userId, clockIn])
 }
 
 model auditLog {
@@ -32,4 +46,5 @@ model auditLog {
   user user @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("audit_logs")
-}
+
+

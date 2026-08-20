@@ -1,12 +1,14 @@
 import bcrypt from "bcryptjs";
 import { User } from "../model/User.js";
 import { UserRepository } from "../repository/user.repository.js";
-import type { RegisterRequestDto } from "../dto/auth/request/register.request.js";
-import type { RegisterResponseDto } from "../dto/auth/response/register.response.js";
-import type { LoginRequestDto } from "../dto/auth/request/login.request.js";
-import type { LoginResponseDto } from "../dto/auth/response/login.response.js";
 import jwt from 'jsonwebtoken';
 import { env } from "../config/env.js";
+
+type Output = {
+    success: boolean;
+    token?: string;
+    error?: string;
+};
 
 export class AuthService {
 
@@ -16,18 +18,17 @@ export class AuthService {
         this.userRepository = userRepository;
     }
 
-    public async register(request: RegisterRequestDto): Promise<RegisterResponseDto> {
+    public async register(data: { name: string; password: string }): Promise<Output> {
 
-        if(await this.userRepository.existsByName(request.name)) {
+        if(await this.userRepository.existsByName(data.name)) {
             return { 
                 success: false,
-                token: null,
                 error: "Nome de usuário já existe"
             }
         }
 
-        const hash = await bcrypt.hash(request.password, 10);
-        const user = new User(request.name, hash);
+        const hash = await bcrypt.hash(data.password, 10);
+        const user = new User(data.name, hash);
         
         await this.userRepository.save(user);
 
@@ -40,28 +41,25 @@ export class AuthService {
         return { 
             success: true,
             token: jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' }),
-            error: null
          };
     }
 
-    public async login(request: LoginRequestDto): Promise<LoginResponseDto> {
+    public async login(data: { name: string; password: string }): Promise<Output> {
 
-        const user = await this.userRepository.findByName(request.name);
+        const user = await this.userRepository.findByName(data.name);
         
         if (!user) {
             return { 
                 success: false,
-                token: null,
                 error: "Usuário não encontrado"
             };
         }
 
-        const isMatch = await bcrypt.compare(request.password, user.passwordHash);
+        const isMatch = await bcrypt.compare(data.password, user.passwordHash);
         
         if (!isMatch) {
             return { 
                 success: false,
-                token: null,
                 error: "Credenciais incorretas"
             };
         }
@@ -75,7 +73,6 @@ export class AuthService {
         return { 
             success: true,
             token: jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' }),
-            error: null
          };
     }
 }

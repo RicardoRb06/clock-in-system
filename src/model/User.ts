@@ -25,6 +25,10 @@ export class User {
         return this._id;
     }
 
+    public set id(id: string) {
+        this._id = id;
+    }
+
     public get name(): string {
         return this._name;
     }
@@ -65,11 +69,11 @@ export class User {
         this._role = role;
     }
 
-    public static fromPersistence(data: { id: string; name: string; passwordHash: string; isActive: boolean; roles: string }): User {
+    public static fromPersistence(data: { id: string; name: string; passwordHash: string; isActive: boolean; role: string }): User {
         const user = new User(data.name, data.passwordHash);
         user._id = data.id;
         user.isActive = data.isActive;
-        user.role = data.roles as ROLES;
+        user.role = data.role as ROLES;
         return user;
     }
 }

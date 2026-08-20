@@ -1,6 +1,7 @@
 import { User, ROLES } from "../../src/model/User.js";
 
 type UserFactoryOverrides = {
+    id?: string;
     name?: string;
     passwordHash?: string;
     isWorking?: boolean;
@@ -14,6 +15,7 @@ export function makeUser(overrides: UserFactoryOverrides = {}): User {
         overrides.passwordHash ?? "defaultPasswordHash"
     );
 
+    if (overrides.id) user.id = overrides.id;
     if (overrides.isWorking !== undefined) user.isWorking = overrides.isWorking;
     if (overrides.isActive !== undefined) user.isActive = overrides.isActive;
     if (overrides.role !== undefined) user.role = overrides.role;
