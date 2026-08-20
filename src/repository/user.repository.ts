@@ -44,12 +44,19 @@ export class UserRepository {
         await this.prisma.user.delete({ where: { id } });
     }
 
-    public async findByName(name: string) {
-        const userResponse = await this.prisma.user.findUnique({ where: { name } });
-        if(!userResponse) {
-            return null;
+    public async findByName(name: string): Promise<Result<User | null, Error>> {
+        try{
+            const userResponse = await this.prisma.user.findUnique({ where: { name } });
+
+            if(!userResponse){
+                return ok(null);
+            }
+
+            const user = User.fromPersistence(userResponse);
+            return ok(user);
+        } catch(e){
+            return err(e as Error);
         }
-        return User.fromPersistence(userResponse);
     }
 
     public async findById(id: string) {
