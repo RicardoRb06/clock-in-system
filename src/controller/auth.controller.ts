@@ -3,6 +3,7 @@ import { LoginRequestSchema } from "../dto/auth/request/login.request.js";
 import { RegisterRequestSchema } from '../dto/auth/request/register.request.js';
 import { AuthService } from '../service/auth.service.js';
 import { z } from 'zod';
+import { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from '../config/cookies.js';
 
 export class AuthController {
     
@@ -32,13 +33,7 @@ export class AuthController {
             });
         }
 
-        res.cookie('auth_token', result.token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 3600000
-        });
-
+        res.cookie(AUTH_COOKIE_NAME, result.token, AUTH_COOKIE_OPTIONS);
 
         return res.status(201).json({
             success: true,
@@ -66,12 +61,7 @@ export class AuthController {
             });
         }
 
-        res.cookie('auth_token', result.token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 3600000
-        });
+        res.cookie(AUTH_COOKIE_NAME, result.token, AUTH_COOKIE_OPTIONS);
 
         return res.status(201).json({
             success: true,
