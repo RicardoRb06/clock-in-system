@@ -6,7 +6,7 @@ import { env } from "../config/env.js";
 import { DuplicateUserError } from "../errors/DuplicateUserError.js";
 
 type Output = 
-    | { success: boolean; role: string; token: string; }
+    | { success: true; role: string; token: string; }
     | { success: false; error: string; }
 
 
