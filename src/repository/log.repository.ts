@@ -6,4 +6,6 @@ export class LogRepository {
     constructor(prisma: PrismaClient) {
         this.prisma = prisma;
     }
+
+    public async getAll(id: string) {}
 }
