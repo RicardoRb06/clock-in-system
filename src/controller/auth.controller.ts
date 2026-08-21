@@ -27,6 +27,7 @@ export class AuthController {
 
         return res.status(201).json({
             success: true,
+            role: result.role,
         });
     }
 
@@ -44,6 +45,7 @@ export class AuthController {
 
         return res.status(200).json({
             success: true,
+            role: result.role,
         });
     }
 }
