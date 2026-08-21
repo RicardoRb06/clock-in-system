@@ -8,6 +8,9 @@ import { TimeEntryRepository } from '../repository/time-entry.repository.js';
 import { TimeEntryService } from '../service/time-entry.service.js';
 import { TimeEntryController } from '../controller/time-entry.controller.js';
 import { env } from '../config/env.js';
+import { validate } from '../middlewares/validate.middleware.js';
+import { RegisterRequestSchema } from '../dto/auth/request/register.request.js';
+import { LoginRequestSchema } from '../dto/auth/request/login.request.js';
 
 export const routes: Router = Router();
 
@@ -22,9 +25,9 @@ const timeEntryController = new TimeEntryController(timeEntryService);
 
 const authMiddleware = new AuthMiddleware(env.JWT_SECRET);
 
-routes.post('/auth/register', (req, res) => authController.register(req, res));
+routes.post('/auth/register', validate(RegisterRequestSchema), (req, res) => authController.register(req, res));
 
-routes.post('/auth/login', (req, res) => authController.login(req, res));
+routes.post('/auth/login', validate(LoginRequestSchema), (req, res) => authController.login(req, res));
 
 routes.post('/time-entry/clock-in', authMiddleware.validate, (req, res) => timeEntryController.clockIn(req, res));
 
