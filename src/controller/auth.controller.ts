@@ -1,8 +1,6 @@
 import type { Request, Response } from 'express';
-import { LoginRequestSchema } from "../dto/auth/request/login.request.js";
-import { RegisterRequestSchema } from '../dto/auth/request/register.request.js';
 import { AuthService } from '../service/auth.service.js';
-import { z } from 'zod';
+import { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from '../config/cookies.js';
 
 export class AuthController {
     
@@ -13,17 +11,7 @@ export class AuthController {
     }
 
     async register(req: Request, res: Response) {
-        const dto = RegisterRequestSchema.safeParse(req.body);
-
-        if (!dto.success) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Dados de envio inválidos",
-                errors: z.flattenError(dto.error).fieldErrors
-            });
-        }
-
-        const result = await this.authService.register(dto.data);
+        const result = await this.authService.register(req.body);
             
         if (!result.success) {
             return res.status(400).json({ 
@@ -32,32 +20,16 @@ export class AuthController {
             });
         }
 
-        res.cookie('auth_token', result.token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 3600000
-        });
-
+        res.cookie(AUTH_COOKIE_NAME, result.token, AUTH_COOKIE_OPTIONS);
 
         return res.status(201).json({
             success: true,
-            tokenType: 'Bearer'
+            role: result.role,
         });
     }
 
     async login(req: Request, res: Response) {
-        const dto = LoginRequestSchema.safeParse(req.body);
-
-        if (!dto.success) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Dados de envio inválidos",
-                errors: z.flattenError(dto.error).fieldErrors
-            });
-        }
-
-        const result = await this.authService.login(dto.data);
+        const result = await this.authService.login(req.body);
             
         if (!result.success) {
             return res.status(400).json({ 
@@ -66,16 +38,11 @@ export class AuthController {
             });
         }
 
-        res.cookie('auth_token', result.token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 3600000
-        });
+        res.cookie(AUTH_COOKIE_NAME, result.token, AUTH_COOKIE_OPTIONS);
 
-        return res.status(201).json({
+        return res.status(200).json({
             success: true,
-            tokenType: 'Bearer'
+            role: result.role,
         });
     }
 }
