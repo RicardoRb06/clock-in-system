@@ -1,7 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { User } from "../model/User.js";
 import { type Result, ok, err } from '../utils/result.js';
-import { mapUserError } from "../utils/prisma.erros.js";
+import { mapError } from "../utils/prisma.errors.js";
 
 export class UserRepository {
 
@@ -21,9 +21,9 @@ export class UserRepository {
                 role: user.role,
                 category: user.category
             }});
-            return ok(undefined);
+            return ok();
         } catch (e) {
-            return err(mapUserError(e, user));
+            return err(mapError(e));
         }
     }
 
@@ -49,7 +49,7 @@ export class UserRepository {
             const userResponse = await this.prisma.user.findUnique({ where: { name } });
 
             if(!userResponse){
-                return ok(null);
+                return ok();
             }
 
             const user = User.fromPersistence(userResponse);
