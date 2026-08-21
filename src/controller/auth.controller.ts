@@ -14,17 +14,7 @@ export class AuthController {
     }
 
     async register(req: Request, res: Response) {
-        const dto = RegisterRequestSchema.safeParse(req.body);
-
-        if (!dto.success) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Dados de envio inválidos",
-                errors: z.flattenError(dto.error).fieldErrors
-            });
-        }
-
-        const result = await this.authService.register(dto.data);
+        const result = await this.authService.register(req.body);
             
         if (!result.success) {
             return res.status(400).json({ 
@@ -41,17 +31,7 @@ export class AuthController {
     }
 
     async login(req: Request, res: Response) {
-        const dto = LoginRequestSchema.safeParse(req.body);
-
-        if (!dto.success) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Dados de envio inválidos",
-                errors: z.flattenError(dto.error).fieldErrors
-            });
-        }
-
-        const result = await this.authService.login(dto.data);
+        const result = await this.authService.login(req.body);
             
         if (!result.success) {
             return res.status(400).json({ 
