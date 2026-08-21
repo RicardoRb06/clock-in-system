@@ -71,4 +71,14 @@ export class UserRepository {
         const userResponse = await this.prisma.user.findUnique({ where: { name } });
         return !!userResponse;
     }
+
+    public async findMany(page: number) {
+        const userResponse = await this.prisma.user.findMany({
+            take: 30,
+            skip: (page - 1) * 30,
+            orderBy: {
+                name: 'asc'
+            }
+        })
+    }
 }
