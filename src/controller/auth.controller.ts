@@ -1,8 +1,5 @@
 import type { Request, Response } from 'express';
-import { LoginRequestSchema } from "../dto/auth/request/login.request.js";
-import { RegisterRequestSchema } from '../dto/auth/request/register.request.js';
 import { AuthService } from '../service/auth.service.js';
-import { z } from 'zod';
 import { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from '../config/cookies.js';
 
 export class AuthController {
