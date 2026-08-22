@@ -28,20 +28,30 @@ export class UserRepository {
     }
 
     public async update(user: User) {
-        await this.prisma.user.update({ 
-            where: { id: user.id },
-            data: {
-                name: user.name,
-                passwordHash: user.passwordHash,
-                isActive: user.isActive,
-                roles: user.role,
-                category: user.category
-            }
-        });
+        try {
+            await this.prisma.user.update({ 
+                where: { id: user.id },
+                data: {
+                    name: user.name,
+                    passwordHash: user.passwordHash,
+                    isActive: user.isActive,
+                    roles: user.role,
+                    category: user.category
+                }
+            });
+            return ok();
+        } catch (e) {
+            return err(mapError(e));
+        }
     }
 
     public async delete(id: string) {
-        await this.prisma.user.delete({ where: { id } });
+        try {
+            await this.prisma.user.delete({ where: { id } });
+            return ok();
+        } catch (e) {
+            return err(mapError(e));
+        }
     }
 
     public async findByName(name: string): Promise<Result<User | null, Error>> {
@@ -55,32 +65,37 @@ export class UserRepository {
             const user = User.fromPersistence(userResponse);
             return ok(user);
         } catch(e){
-            return err(e as Error);
+            return err(mapError(e));
         }
     }
 
     public async findById(id: string) {
-        const userResponse = await this.prisma.user.findUnique({ where: { id } });
-        if(!userResponse) {
-            return null;
+        try {
+            const userResponse = await this.prisma.user.findUnique({ where: { id } });
+            if(!userResponse) {
+                return ok();
+            }
+            return ok(User.fromPersistence(userResponse));
         }
-        return User.fromPersistence(userResponse);
-    }
-
-    public async existsByName(name: string) {
-        const userResponse = await this.prisma.user.findUnique({ where: { name } });
-        return !!userResponse;
+        catch (e) {
+            return err(mapError(e));
+        }
     }
 
     public async findMany(page: number) {
-        const userResponse = await this.prisma.user.findMany({
-            take: 30,
-            skip: (page - 1) * 30,
-            orderBy: {
-                name: 'asc'
-            }
-        })
+        try {
+            const userResponse = await this.prisma.user.findMany({
+                take: 30,
+                skip: (page - 1) * 30,
+                orderBy: {
+                    name: 'asc'
+                }
+            })
 
-        return userResponse;
+            return ok(userResponse);
+        }
+        catch (e) {
+            return err(mapError(e));
+        }
     }
 }
