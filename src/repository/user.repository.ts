@@ -80,5 +80,7 @@ export class UserRepository {
                 name: 'asc'
             }
         })
+
+        return userResponse;
     }
 }
