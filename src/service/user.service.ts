@@ -31,7 +31,9 @@ export class UserService {
         }
     }
 
-    public async getUsers(page: number) {
+    public async getUsers(page?: number) {
+        if(!page) page = 1;
+
         const result = await this.userRepository.findMany(page);
 
         if(!result.success) {
