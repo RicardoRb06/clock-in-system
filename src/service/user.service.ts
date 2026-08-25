@@ -38,13 +38,13 @@ export class UserService {
 
         if(!result.success) {
             return {
-                sucess: false,
+                success: false,
                 error: result.error.message
             }
         }
 
         return {
-            sucess: true,
+            success: true,
             data: result.data ?? "Nenhum usuário encontrado"
         }
     }
