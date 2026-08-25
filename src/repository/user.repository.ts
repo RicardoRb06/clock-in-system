@@ -75,19 +75,6 @@ export class UserRepository {
         }
     }
 
-    public async findById(id: string) {
-        try {
-            const userResponse = await this.prisma.user.findUnique({ where: { id } });
-            if(!userResponse) {
-                return ok();
-            }
-            return ok(User.fromPersistence(userResponse));
-        }
-        catch (e) {
-            return err(mapError(e));
-        }
-    }
-
     public async findMany(page: number) {
         try {
             const userResponse = await this.prisma.user.findMany({
