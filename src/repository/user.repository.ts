@@ -54,9 +54,15 @@ export class UserRepository {
         }
     }
 
-    public async findByName(name: string): Promise<Result<User | null, Error>> {
+    public async find(param: string, type: 'name' | 'id'): Promise<Result<User | null, Error>> {
         try {
-            const userResponse = await this.prisma.user.findUnique({ where: { name } });
+            let userResponse;
+
+            if(type === 'name') {
+                userResponse = await this.prisma.user.findUnique({ where: { name: param } });
+            } else {
+                userResponse = await this.prisma.user.findUnique({ where: { id: param } });
+            }
 
             if(!userResponse){
                 return ok();
