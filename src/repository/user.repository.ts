@@ -55,7 +55,7 @@ export class UserRepository {
     }
 
     public async findByName(name: string): Promise<Result<User | null, Error>> {
-        try{
+        try {
             const userResponse = await this.prisma.user.findUnique({ where: { name } });
 
             if(!userResponse){
