@@ -44,7 +44,7 @@ export class AuthService {
     }
 
     public async login(data: { name: string; password: string }): Promise<Output> {
-        const response = await this.userRepository.find(data.name, 'name');
+        const response = await this.userRepository.findByName(data.name);
 
         if (!response.success) {
             return { success: false, error: "Não foi possível realizar o login" };
