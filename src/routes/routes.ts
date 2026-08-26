@@ -33,6 +33,8 @@ routes.post('/auth/register', validate(RegisterRequestSchema), (req, res) => aut
 
 routes.post('/auth/login', validate(LoginRequestSchema), (req, res) => authController.login(req, res));
 
+routes.get('auth/me', authMiddleware.validate, (req, res) => authController.me(req, res));
+
 routes.post('/time-entry/clock-in', authMiddleware.validate, (req, res) => timeEntryController.clockIn(req, res));
 
 routes.post('/time-entry/clock-out', authMiddleware.validate, (req, res) => timeEntryController.clockOut(req, res));
