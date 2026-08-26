@@ -11,7 +11,7 @@ export class UserRepository {
         this.prisma = prisma;
     }
 
-    public async save(user: User): Promise<Result<void>> {
+    public async save(user: User): Promise<Result<null, Error>> {
         try{
             await this.prisma.user.create({ data: {
                 id: user.id,
@@ -27,7 +27,7 @@ export class UserRepository {
         }
     }
 
-    public async update(user: User) {
+    public async update(user: User): Promise<Result<null, Error>> {
         try {
             await this.prisma.user.update({ 
                 where: { id: user.id },
@@ -45,7 +45,7 @@ export class UserRepository {
         }
     }
 
-    public async delete(id: string) {
+    public async delete(id: string): Promise<Result<null, Error>> {
         try {
             await this.prisma.user.delete({ where: { id } });
 
@@ -55,7 +55,7 @@ export class UserRepository {
         }
     }
 
-    public async findById(id: string): Promise<Result<User | null, Error>> {
+    public async findById(id: string): Promise<Result<User, Error>> {
         try {
             const userResponse = await this.prisma.user.findUnique({ where: { id } });
             
@@ -71,7 +71,7 @@ export class UserRepository {
         }
     }
 
-    public async findByName(name: string): Promise<Result<User | null, Error>> {
+    public async findByName(name: string): Promise<Result<User, Error>> {
         try {
             const userResponse = await this.prisma.user.findUnique({ where: { name } });
             
@@ -87,7 +87,7 @@ export class UserRepository {
         }
     }
 
-    public async findMany(page: number) {
+    public async findMany(page: number): Promise<Result<User[], Error>> {
         try {
             const userResponse = await this.prisma.user.findMany({
                 take: 30,
