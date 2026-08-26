@@ -1,6 +1,5 @@
 import type { User } from "@prisma/client";
 import type { UserRepository } from "../repository/user.repository.js";
-import { success } from "zod";
 
 export class UserService {
 
