@@ -74,4 +74,21 @@ export class AuthService {
             token: this.generateToken(user),
          };
     }
+
+    public async me(data: { userId: string }): Promise<MeOutput> {
+        const response = await this.userRepository.findById(data.userId);
+        
+        if(!response.success) {
+            return { success: false }
+        }
+
+        const user = response.data;
+
+        return {
+            success: true,
+            name: user.name,
+            role: user.role,
+            category: user.category,
+        }
+    }
 }
