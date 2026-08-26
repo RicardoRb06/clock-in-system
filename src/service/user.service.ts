@@ -1,5 +1,6 @@
 import type { User } from "@prisma/client";
 import type { UserRepository } from "../repository/user.repository.js";
+import { ok, err } from '../utils/result.js';
 
 export class UserService {
 
@@ -17,34 +18,18 @@ export class UserService {
 
         const result = await this.userRepository.findById(id);
 
-        if(!result.success) {
-            return {
-                success: false,
-                error: result.error.message
-            }
-        }
+        if(!result.success) return err(result.error);
 
-        return {
-            success: true,
-            data: result.data ?? "Nenhum usuário encontrado"
-        }
+        return ok(result.data);
     }
 
     public async findByName(name: string) {
 
         const result = await this.userRepository.findById(name);
 
-        if(!result.success) {
-            return {
-                success: false,
-                error: result.error.message
-            }
-        }
+        if(!result.success) return err(result.error);
 
-        return {
-            success: true,
-            data: result.data ?? "Nenhum usuário encontrado"
-        }
+        return ok(result.data ?? "Nenhum usuário encontrado");
     }
 
     public async getUsers(page?: number) {
@@ -52,16 +37,8 @@ export class UserService {
 
         const result = await this.userRepository.findMany(page);
 
-        if(!result.success) {
-            return {
-                success: false,
-                error: result.error.message
-            }
-        }
+        if(!result.success) return err(result.error);
 
-        return {
-            success: true,
-            data: result.data ?? "Nenhum usuário encontrado"
-        }
+        return ok(result.data ?? "Nenhum usuário encontrado");
     }
 }
