@@ -9,6 +9,9 @@ type Output =
     | { success: true; role: string; token: string; }
     | { success: false; error: string; }
 
+type MeOutput = 
+    | { success: true; name: string; role: string; category: string; }
+    | { success: false; }
 
 export class AuthService {
 
