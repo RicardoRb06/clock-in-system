@@ -14,9 +14,26 @@ export class UserService {
 
     }
 
-    public async find(param: string, type: 'name' | 'id') {
+    public async findById(id: string) {
 
-        const result = await this.userRepository.find(param, type);
+        const result = await this.userRepository.findById(id);
+
+        if(!result.success) {
+            return {
+                success: false,
+                error: result.error.message
+            }
+        }
+
+        return {
+            success: true,
+            data: result.data ?? "Nenhum usuário encontrado"
+        }
+    }
+
+    public async findByName(name: string) {
+
+        const result = await this.userRepository.findById(name);
 
         if(!result.success) {
             return {
