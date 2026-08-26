@@ -32,9 +32,7 @@ export class UserService {
         return ok(result.data ?? "Nenhum usuário encontrado");
     }
 
-    public async getUsers(page?: number) {
-        if(!page) page = 1;
-
+    public async getUsers(page: number = 1) {
         const result = await this.userRepository.findMany(page);
 
         if(!result.success) return err(result.error);
