@@ -60,7 +60,7 @@ export class UserRepository {
             const userResponse = await this.prisma.user.findUnique({ where: { id } });
             
             if(!userResponse){
-                return ok();
+                return err(new Error("Usuário não encontrado"));
             }
 
             const user = User.fromPersistence(userResponse);
@@ -76,7 +76,7 @@ export class UserRepository {
             const userResponse = await this.prisma.user.findUnique({ where: { name } });
             
             if(!userResponse){
-                return ok();
+                return err(new Error("Usuário não encontrado"));
             }
 
             const user = User.fromPersistence(userResponse);
@@ -96,6 +96,10 @@ export class UserRepository {
                     name: 'asc'
                 }
             })
+
+            if(!userResponse) {
+                return err(new Error("Nenhum usuário encontrado"));                
+            }
 
             return ok(userResponse);
         }
