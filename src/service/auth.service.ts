@@ -10,7 +10,7 @@ type Output =
     | { success: false; error: string; }
 
 type MeOutput = 
-    | { success: true; name: string; role: string; category: string; }
+    | { success: true; name: string; role: string; category: string | null; }
     | { success: false; }
 
 export class AuthService {
@@ -77,7 +77,7 @@ export class AuthService {
 
     public async me(data: { userId: string }): Promise<MeOutput> {
         const response = await this.userRepository.findById(data.userId);
-        
+
         if(!response.success) {
             return { success: false }
         }
