@@ -43,11 +43,7 @@ export class UserController {
     }
 
     public async getUsers(req: Request, res: Response) {
-        if(!req.body.page) {
-            req.body.page = 1;
-        }
-
-        const result = await this.userService.getUsers(req.body.page);
+        const result = await this.userService.getUsers();
 
         if(!result.success) {
             return this.fail(res, result.error);
