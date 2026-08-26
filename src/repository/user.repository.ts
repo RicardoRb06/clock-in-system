@@ -48,29 +48,41 @@ export class UserRepository {
     public async delete(id: string) {
         try {
             await this.prisma.user.delete({ where: { id } });
+
             return ok();
         } catch (e) {
             return err(mapError(e));
         }
     }
 
-    public async find(param: string, type: 'name' | 'id'): Promise<Result<User | null, Error>> {
+    public async findById(id: string): Promise<Result<User | null, Error>> {
         try {
-            let userResponse;
-
-            if(type === 'name') {
-                userResponse = await this.prisma.user.findUnique({ where: { name: param } });
-            } else {
-                userResponse = await this.prisma.user.findUnique({ where: { id: param } });
-            }
-
+            const userResponse = await this.prisma.user.findUnique({ where: { id } });
+            
             if(!userResponse){
                 return ok();
             }
 
             const user = User.fromPersistence(userResponse);
+
             return ok(user);
-        } catch(e){
+        } catch(e) {
+            return err(mapError(e));
+        }
+    }
+
+    public async findByName(name: string): Promise<Result<User | null, Error>> {
+        try {
+            const userResponse = await this.prisma.user.findUnique({ where: { name } });
+            
+            if(!userResponse){
+                return ok();
+            }
+
+            const user = User.fromPersistence(userResponse);
+
+            return ok(user);
+        } catch(e) {
             return err(mapError(e));
         }
     }
