@@ -10,7 +10,7 @@ type Output =
     | { success: false; error: string; }
 
 type MeOutput = 
-    | { success: true; name: string; role: string; category: string | null; }
+    | { success: true; user: User}
     | { success: false; }
 
 export class AuthService {
@@ -86,9 +86,7 @@ export class AuthService {
 
         return {
             success: true,
-            name: user.name,
-            role: user.role,
-            category: user.category,
+            user: user
         }
     }
 }
