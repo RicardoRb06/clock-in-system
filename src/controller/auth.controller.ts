@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express';
 import { AuthService } from '../service/auth.service.js';
 import { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from '../config/cookies.js';
-import { success } from 'zod';
 
 export class AuthController {
     
