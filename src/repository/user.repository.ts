@@ -101,7 +101,9 @@ export class UserRepository {
                 return err(new Error("Nenhum usuário encontrado"));                
             }
 
-            return ok(userResponse);
+            const users = userResponse.map(User.fromPersistence);
+
+            return ok(users);
         }
         catch (e) {
             return err(mapError(e));
