@@ -55,9 +55,7 @@ export class AuthController {
 
         return res.status(200).json({
             success: true,
-            name: result.name,
-            role: result.role,
-            category: result.category,
+            user: result,
         })
 
     }
