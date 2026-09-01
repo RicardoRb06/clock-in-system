@@ -11,9 +11,9 @@ export class UserRepository {
         this.prisma = prisma;
     }
 
-    public async save(user: User): Promise<Result<null, Error>> {
+    public async save(user: User): Promise<Result<User, Error>> {
         try {
-            await this.prisma.user.create({ data: {
+            const userResponse = await this.prisma.user.create({ data: {
                 id: user.id,
                 name: user.name,
                 passwordHash: user.passwordHash,
@@ -21,7 +21,7 @@ export class UserRepository {
                 role: user.role,
                 category: user.category
             }});
-            return ok();
+            return ok(User.fromPersistence(userResponse));
         } catch (e) {
             return err(mapError(e));
         }
@@ -102,7 +102,7 @@ export class UserRepository {
             }
 
             const users: User[] = userResponse.map((user) => User.fromPersistence(user));
-            
+
             return ok(users);
         }
         catch (e) {
