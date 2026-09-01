@@ -12,7 +12,7 @@ export class UserRepository {
     }
 
     public async save(user: User): Promise<Result<null, Error>> {
-        try{
+        try {
             await this.prisma.user.create({ data: {
                 id: user.id,
                 name: user.name,
@@ -101,7 +101,9 @@ export class UserRepository {
                 return err(new Error("Nenhum usuário encontrado"));                
             }
 
-            return ok(userResponse);
+            const users: User[] = userResponse.map((user) => User.fromPersistence(user));
+            
+            return ok(users);
         }
         catch (e) {
             return err(mapError(e));
