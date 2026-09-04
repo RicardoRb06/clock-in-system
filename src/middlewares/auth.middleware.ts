@@ -20,16 +20,10 @@ export class AuthMiddleware {
     }
 
     public validate = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
-        const authHeader = req.headers.authorization;
-
-        if (!authHeader) {
-            throw new Error("TOKEN_NOT_PROVIDED: Cabeçalho de autorização ausente.");
-        }
-
-        const [scheme, token] = authHeader.split(' ');
-
-        if (scheme !== 'Bearer' || !token) {
-            throw new Error("TOKEN_MALFORMED: O token enviado não segue o formato Bearer.");
+        const token = req.cookies?.auth_token;
+        
+        if (!token) {
+            throw new Error("TOKEN_NOT_PROVIDED: Token de autenticação ausente.");
         }
 
         const decoded = jwt.verify(token, this.jwtSecret);
