@@ -50,7 +50,7 @@ export class AuthController {
 
 
     public async me(req: Request, res: Response) {
-        const result = await this.authService.me(req.body);
+        const result = await this.authService.me(req.user.id);
 
         if(!result.success) {
             return fail(res, result.error);
