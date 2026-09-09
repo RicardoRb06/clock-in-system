@@ -101,7 +101,10 @@ export class UserRepository {
                 return err(new Error("Nenhum usuário encontrado"));                
             }
 
-            const users: User[] = userResponse.map((user) => User.fromPersistence(user));
+            const users: User[] = userResponse
+                .map((user) => User.fromPersistence(user))
+                .filter((user) => user.isActive && (user.role === 'user' || user.role === 'admin'));
+
 
             return ok(users);
         }
