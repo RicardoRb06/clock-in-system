@@ -19,7 +19,7 @@ export function err(error: Error): Result<never> {
     return { success: false, error: error};
 }
 
-export function complete<T>(res: Response, status: number, data: T) {
+export function complete<T = null>(res: Response, status: number, data?: T) {
     return res.status(status).json({
         success: true,
         data: data,
