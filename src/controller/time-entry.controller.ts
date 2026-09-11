@@ -1,6 +1,7 @@
 import type { TimeEntryService } from "../service/time-entry.service.js";
 import type { Request, Response } from 'express';
 import { complete, fail } from '../utils/result.js';
+import { timeEntryService } from "../service/time-entry.service.js";
 
 export class TimeEntryController {
 
@@ -30,3 +31,5 @@ export class TimeEntryController {
         return complete(res, 200, undefined);
     }
 }
+
+export const timeEntryController = new TimeEntryController(timeEntryService);
