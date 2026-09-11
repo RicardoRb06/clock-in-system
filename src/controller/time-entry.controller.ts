@@ -1,4 +1,4 @@
-import { TimeEntryRequestSchema } from "../dto/time-entry/request/time-entry.request.js";
+import { TimeEntryRequestSchema } from "../dto/time-entry.dto.js";
 import type { TimeEntryService } from "../service/time-entry.service.js";
 import type { Request, Response } from 'express';
 import { complete, fail } from '../utils/result.js';
