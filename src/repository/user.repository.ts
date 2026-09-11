@@ -2,6 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 import { User } from "../model/User.js";
 import { type Result, ok, err } from '../utils/result.js';
 import { mapError } from "../utils/prisma.errors.js";
+import { prisma } from "../database/prisma.js";
 
 export class UserRepository {
 
@@ -113,3 +114,5 @@ export class UserRepository {
         }
     }
 }
+
+export const userRepository = new UserRepository(prisma);
