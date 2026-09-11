@@ -1,12 +1,13 @@
 import { TimeEntryRequestSchema } from "../dto/time-entry/request/time-entry.request.js";
 import type { TimeEntryService } from "../service/time-entry.service.js";
 import type { Request, Response } from 'express';
+import { complete, fail } from '../utils/result.js';
 import { z } from 'zod';
 
 export class TimeEntryController {
-    
+
     private timeEntryService: TimeEntryService;
-    
+
     constructor(timeEntryService: TimeEntryService) {
         this.timeEntryService = timeEntryService;
     }
@@ -15,8 +16,8 @@ export class TimeEntryController {
         const dto = TimeEntryRequestSchema.safeParse(req.body);
 
         if (!dto.success) {
-            return res.status(400).json({ 
-                success: false, 
+            return res.status(400).json({
+                success: false,
                 message: "Dados de envio inválidos",
                 errors: z.flattenError(dto.error).fieldErrors
             });
@@ -25,23 +26,18 @@ export class TimeEntryController {
         const result = await this.timeEntryService.clockIn(dto.data);
 
         if (!result.success) {
-            return res.status(400).json({ 
-                success: false, 
-                message: result.error 
-            });
+            return fail(res, result.error);
         }
 
-        return res.status(200).json({
-            success: true,
-        });
+        return complete(res, 200, undefined);
     }
 
     async clockOut(req: Request, res: Response) {
         const dto = TimeEntryRequestSchema.safeParse(req.body);
 
         if (!dto.success) {
-            return res.status(400).json({ 
-                success: false, 
+            return res.status(400).json({
+                success: false,
                 message: "Dados de envio inválidos",
                 errors: z.flattenError(dto.error).fieldErrors
             });
@@ -50,14 +46,9 @@ export class TimeEntryController {
         const result = await this.timeEntryService.clockOut(dto.data);
 
         if (!result.success) {
-            return res.status(400).json({ 
-                success: false, 
-                message: result.error 
-            });
+            return fail(res, result.error);
         }
 
-        return res.status(200).json({
-            success: true,
-        });
+        return complete(res, 200, undefined);
     }
 }
