@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { TimeEntry } from "../model/TimeEntry.js";
 import { type Result, ok, err } from '../utils/result.js';
 import { mapError } from "../utils/prisma.errors.js";
+import { prisma } from "../database/prisma.js";
 
 export class TimeEntryRepository {
 
@@ -87,3 +88,5 @@ export class TimeEntryRepository {
         }
     }
 }
+
+export const timeEntryRepository = new TimeEntryRepository(prisma);
