@@ -24,7 +24,7 @@ export class AuthController {
 
         res.cookie(AUTH_COOKIE_NAME, token, AUTH_COOKIE_OPTIONS);
 
-        return complete(res, 201, { role: user.role });
+        return complete(res, 201);
     }
 
     public async login(req: Request, res: Response) {
@@ -38,7 +38,7 @@ export class AuthController {
 
         res.cookie(AUTH_COOKIE_NAME, token, AUTH_COOKIE_OPTIONS);
 
-        return complete(res, 201, { role: user.role });
+        return complete(res, 201);
     }
 
     public async logout(req: Request, res: Response) {
