@@ -5,6 +5,7 @@ import { env } from "../config/env.js";
 import { User } from "../model/User.js";
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
+import { userRepository } from "../repository/user.repository.js";
 
 export class AuthService {
 
@@ -66,3 +67,5 @@ export class AuthService {
         return ok(user);
     }
 }
+
+export const authService = new AuthService(userRepository);
