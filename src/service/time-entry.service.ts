@@ -1,6 +1,7 @@
 import { TimeEntryRepository } from "../repository/time-entry.repository.js";
 import { type Result, ok, err } from '../utils/result.js';
 import { TimeEntry } from "../model/TimeEntry.js";
+import { timeEntryRepository } from "../repository/time-entry.repository.js";
 
 export class TimeEntryService {
 
@@ -46,3 +47,5 @@ export class TimeEntryService {
         return ok();
     }
 }
+
+export const timeEntryService = new TimeEntryService(timeEntryRepository);
