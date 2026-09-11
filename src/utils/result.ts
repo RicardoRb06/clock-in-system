@@ -26,8 +26,8 @@ export function complete<T>(res: Response, status: number, data: T) {
     });
 }
 
-export function fail(res: Response, error: Error) {
-    return res.status(400).json({
+export function fail(res: Response, status: number, error: Error) {
+    return res.status(status).json({
         success: false,
         message: error.message
     });
