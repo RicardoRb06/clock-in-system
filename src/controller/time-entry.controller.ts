@@ -1,8 +1,6 @@
-import { TimeEntryRequestSchema } from "../dto/time-entry.dto.js";
 import type { TimeEntryService } from "../service/time-entry.service.js";
 import type { Request, Response } from 'express';
 import { complete, fail } from '../utils/result.js';
-import { z } from 'zod';
 
 export class TimeEntryController {
 
@@ -13,17 +11,7 @@ export class TimeEntryController {
     }
 
     async clockIn(req: Request, res: Response) {
-        const dto = TimeEntryRequestSchema.safeParse(req.body);
-
-        if (!dto.success) {
-            return res.status(400).json({
-                success: false,
-                message: "Dados de envio inválidos",
-                errors: z.flattenError(dto.error).fieldErrors
-            });
-        }
-
-        const result = await this.timeEntryService.clockIn(dto.data);
+        const result = await this.timeEntryService.clockIn(req.body);
 
         if (!result.success) {
             return fail(res, result.error);
@@ -33,17 +21,7 @@ export class TimeEntryController {
     }
 
     async clockOut(req: Request, res: Response) {
-        const dto = TimeEntryRequestSchema.safeParse(req.body);
-
-        if (!dto.success) {
-            return res.status(400).json({
-                success: false,
-                message: "Dados de envio inválidos",
-                errors: z.flattenError(dto.error).fieldErrors
-            });
-        }
-
-        const result = await this.timeEntryService.clockOut(dto.data);
+        const result = await this.timeEntryService.clockOut(req.body);
 
         if (!result.success) {
             return fail(res, result.error);
