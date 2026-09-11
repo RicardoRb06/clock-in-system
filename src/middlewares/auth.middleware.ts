@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from 'jsonwebtoken';
+import { env } from "../config/env.js";
 
 interface AuthJwtPayload {
     id: string;
@@ -41,3 +42,5 @@ export class AuthMiddleware {
         next();
     };
 }
+
+export const authMiddleware = new AuthMiddleware(env.JWT_SECRET);
