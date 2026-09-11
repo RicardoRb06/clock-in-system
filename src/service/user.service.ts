@@ -1,6 +1,7 @@
 import type { User } from "@prisma/client";
 import type { UserRepository } from "../repository/user.repository.js";
 import { ok, err } from '../utils/result.js';
+import { userRepository } from "../repository/user.repository.js";
 
 export class UserService {
 
@@ -40,3 +41,5 @@ export class UserService {
         return ok(result.data ?? "Nenhum usuário encontrado");
     }
 }
+
+export const userService = new UserService(userRepository);
