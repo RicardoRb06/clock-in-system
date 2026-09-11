@@ -12,6 +12,7 @@ import { validate } from '../middlewares/validate.middleware.js';
 import { UserService } from '../service/user.service.js';
 import { UserController } from '../controller/user.controller.js';
 import { LoginRequestSchema, RegisterRequestSchema } from '../dto/auth.dto.js';
+import { TimeEntryRequestSchema } from '../dto/time-entry.dto.js';
 
 export const routes: Router = Router();
 
@@ -36,8 +37,8 @@ routes.get('/auth/logout', (req, res) => authController.logout(req, res));
 
 routes.get('/auth/me', authMiddleware.validate, (req, res) => authController.me(req, res));
 
-routes.post('/time-entry/clock-in', authMiddleware.validate, (req, res) => timeEntryController.clockIn(req, res));
+routes.post('/time-entry/clock-in', authMiddleware.validate, validate(TimeEntryRequestSchema), (req, res) => timeEntryController.clockIn(req, res));
 
-routes.post('/time-entry/clock-out', authMiddleware.validate, (req, res) => timeEntryController.clockOut(req, res));
+routes.post('/time-entry/clock-out', authMiddleware.validate, validate(TimeEntryRequestSchema), (req, res) => timeEntryController.clockOut(req, res));
 
 routes.get('/users/get-all', authMiddleware.validate, (req, res) => userController.getUsers(req, res));
