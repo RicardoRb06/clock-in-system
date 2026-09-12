@@ -20,7 +20,7 @@ export class AuthService {
         return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' });
     }
 
-    public async register(data: RegisterRequest): Promise<Result<[User, string], Error>> {
+    public async register(data: RegisterRequest): Promise<Result<string, Error>> {
         const hash = await bcrypt.hash(data.password, 10);
         const user = new User(data.name, hash);
         const result = await this.userRepository.save(user);
@@ -29,7 +29,7 @@ export class AuthService {
 
         const token = this.generateToken(user);
 
-        return ok([user, token]);
+        return ok(token);
     }
 
     public async login(data: LoginRequest): Promise<Result<[User, string], Error>> {
