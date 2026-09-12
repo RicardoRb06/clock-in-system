@@ -54,11 +54,11 @@ export class AuthController {
         const result = await this.authService.me(req.user.id);
 
         if(!result.success) {
-            return fail(res, result.error);
+            return fail(res, 400, result.error);
         }
 
         if(!result.data) {
-            return fail(res, new Error("Erro inesperado no servidor"));
+            return fail(res, 500, new Error("Erro inesperado no servidor"));
         }
 
         return complete(res, 201, { name: result.data.name, role: result.data.role, category: result.data.category  });
