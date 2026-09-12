@@ -2,7 +2,6 @@ import type { Request, Response } from 'express';
 import type { AuthService } from "../service/auth.service.js";
 import { complete, fail } from '../utils/result.js';
 import { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from '../config/cookies.js';
-import type { User } from '../model/User.js';
 import { authService } from "../service/auth.service.js";
 
 export class AuthController {
