@@ -1,10 +1,7 @@
 import { TimeEntryRepository } from "../repository/time-entry.repository.js";
+import { type Result, ok, err } from '../utils/result.js';
 import { TimeEntry } from "../model/TimeEntry.js";
-
-type Output = {
-    success: boolean;
-    error?: string;
-};
+import { timeEntryRepository } from "../repository/time-entry.repository.js";
 
 export class TimeEntryService {
 
@@ -14,39 +11,41 @@ export class TimeEntryService {
         this.timeEntryRepository = timeEntryRepository;
     }
 
-    public async clockIn(data: { userId: string }): Promise<Output> {
-        const openEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(data.userId);
-            
-        if (!openEntry) {
-            return {
-                success: false,
-                error: "Já existe um registro de ponto aberto para este usuário."
-            };
+    public async clockIn(data: { userId: string }): Promise<Result<void, Error>> {
+        const findResult = await this.timeEntryRepository.findOpenTimeEntryByUserId(data.userId);
+
+        if (!findResult.success) return err(findResult.error);
+
+        if (findResult.data) {
+            return err(new Error("Já existe um registro de ponto aberto para este usuário."));
         }
 
         const timeEntry = new TimeEntry(data.userId, new Date());
-        await this.timeEntryRepository.create(timeEntry);
+        const createResult = await this.timeEntryRepository.create(timeEntry);
 
-        return {
-            success: true
-        };
+        if (!createResult.success) return err(createResult.error);
+
+        return ok();
     }
 
-    public async clockOut(data: { userId: string }): Promise<Output> {
-        const openEntry = await this.timeEntryRepository.findOpenTimeEntryByUserId(data.userId);
-        
-        if(!openEntry) {
-            return {
-                success: false,
-                error: "Não existe um registro de ponto aberto para este usuário."
-            }
-        }
-        
-        openEntry.clockOut = new Date();
-        await this.timeEntryRepository.update(openEntry);
+    public async clockOut(data: { userId: string }): Promise<Result<void, Error>> {
+        const findResult = await this.timeEntryRepository.findOpenTimeEntryByUserId(data.userId);
 
-        return {
-            success: true
-        };
+        if (!findResult.success) return err(findResult.error);
+
+        const openEntry = findResult.data;
+
+        if(!openEntry) {
+            return err(new Error("Não existe um registro de ponto aberto para este usuário."));
+        }
+
+        openEntry.clockOut = new Date();
+        const updateResult = await this.timeEntryRepository.update(openEntry);
+
+        if (!updateResult.success) return err(updateResult.error);
+
+        return ok();
     }
 }
+
+export const timeEntryService = new TimeEntryService(timeEntryRepository);

@@ -4,12 +4,14 @@ import { ErrorMiddleware } from './middlewares/error.middleware.js';
 import { routes } from './routes/routes.js'
 import { CorsMiddleware } from './middlewares/cors.middleware.js';
 import { env } from '../src/config/env.js';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const PORT = env.PORT;
 
 const corsMiddleware = new CorsMiddleware(env.CORS_ALLOWED_ORIGINS);
 app.use(corsMiddleware.handler());
+app.use(cookieParser());
 
 app.use(express.json());
 

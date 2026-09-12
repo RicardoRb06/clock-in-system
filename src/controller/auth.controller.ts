@@ -1,81 +1,68 @@
 import type { Request, Response } from 'express';
-import { LoginRequestSchema } from "../dto/auth/request/login.request.js";
-import { RegisterRequestSchema } from '../dto/auth/request/register.request.js';
-import { AuthService } from '../service/auth.service.js';
-import { z } from 'zod';
+import type { AuthService } from "../service/auth.service.js";
+import { complete, fail } from '../utils/result.js';
+import { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from '../config/cookies.js';
+import type { User } from '../model/User.js';
+import { authService } from "../service/auth.service.js";
+
 
 export class AuthController {
-    
     private authService: AuthService;
-    
+
     constructor(authService: AuthService) {
         this.authService = authService;
     }
 
-    async register(req: Request, res: Response) {
-        const dto = RegisterRequestSchema.safeParse(req.body);
+    public async register(req: Request, res: Response) {
+        const result = await this.authService.register(req.body);
 
-        if (!dto.success) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Dados de envio inválidos",
-                errors: z.flattenError(dto.error).fieldErrors
-            });
+        if(!result.success) {
+            return fail(res, 400, result.error);
         }
 
-        const result = await this.authService.register(dto.data);
-            
-        if (!result.success) {
-            return res.status(400).json({ 
-                success: false, 
-                message: result.error 
-            });
-        }
+        const [user, token] = result.data as [User, string];
 
-        res.cookie('auth_token', result.token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 3600000
-        });
+        res.cookie(AUTH_COOKIE_NAME, token, AUTH_COOKIE_OPTIONS);
 
-
-        return res.status(201).json({
-            success: true,
-            tokenType: 'Bearer'
-        });
+        return complete(res, 201);
     }
 
-    async login(req: Request, res: Response) {
-        const dto = LoginRequestSchema.safeParse(req.body);
+    public async login(req: Request, res: Response) {
+        const result = await this.authService.login(req.body);
 
-        if (!dto.success) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Dados de envio inválidos",
-                errors: z.flattenError(dto.error).fieldErrors
-            });
+        if(!result.success) {
+            return fail(res, 400, result.error);
         }
 
-        const result = await this.authService.login(dto.data);
-            
-        if (!result.success) {
-            return res.status(400).json({ 
-                success: false, 
-                message: result.error 
-            });
+        const [user, token] = result.data as [User, string];
+
+        res.cookie(AUTH_COOKIE_NAME, token, AUTH_COOKIE_OPTIONS);
+
+        return complete(res, 201);
+    }
+
+    public async logout(req: Request, res: Response) {
+        const { maxAge, ...clearOptions } = AUTH_COOKIE_OPTIONS;
+
+        res.clearCookie(AUTH_COOKIE_NAME, clearOptions);
+        
+        return complete(res, 200, { message: "Logout realizado com sucesso" });
+    }
+
+
+    public async me(req: Request, res: Response) {
+        const result = await this.authService.me(req.user.id);
+
+        if(!result.success) {
+            return fail(res, result.error);
         }
 
-        res.cookie('auth_token', result.token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 3600000
-        });
+        if(!result.data) {
+            return fail(res, new Error("Erro inesperado no servidor"));
+        }
 
-        return res.status(201).json({
-            success: true,
-            tokenType: 'Bearer'
-        });
+        return complete(res, 201, { name: result.data.name, role: result.data.role, category: result.data.category  });
     }
 }
+
+export const authController = new AuthController(authService);

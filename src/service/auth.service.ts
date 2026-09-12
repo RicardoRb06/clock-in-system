@@ -1,74 +1,71 @@
-import bcrypt from "bcryptjs";
-import { User } from "../model/User.js";
-import { UserRepository } from "../repository/user.repository.js";
-import jwt from 'jsonwebtoken';
+import type { UserRepository } from "../repository/user.repository.js";
+import type { LoginRequest, RegisterRequest } from "../dto/auth.dto.js";
+import { type Result, ok, err } from '../utils/result.js';
 import { env } from "../config/env.js";
-import { DuplicateUserError } from "../errors/DuplicateUserError.js";
-
-type Output = 
-    | { success: boolean; role: string; token: string; }
-    | { success: false; error: string; }
-
+import { User } from "../model/User.js";
+import bcrypt from "bcryptjs";
+import jwt from 'jsonwebtoken';
+import { userRepository } from "../repository/user.repository.js";
 
 export class AuthService {
 
     private userRepository: UserRepository;
-
+    
     constructor(userRepository: UserRepository) {
         this.userRepository = userRepository;
     }
 
-    private generateToken(user: User){
+    private generateToken(user: User): string {
         const payload = {id: user.id, name: user.name, role: user.role}
         return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' });
     }
 
-    public async register(data: { name: string; password: string }): Promise<Output> {
+    public async register(data: RegisterRequest): Promise<Result<[User, string], Error>> {
         const hash = await bcrypt.hash(data.password, 10);
         const user = new User(data.name, hash);
         const result = await this.userRepository.save(user);
-           
-        if(!result.success) {
-            if(result.error instanceof DuplicateUserError){
-                return { success: false, error: result.error.message};
-            } else {
-                return { success: false, error: "Não foi possível realizar o cadastro. Tente novamente mais tarde."};
-            }
-        }
 
-        return { 
-            success: true,
-            role: user.role,
-            token: this.generateToken(user),
-        };
+        if(!result.success) return err(result.error);
+
+        const token = this.generateToken(user);
+
+        return ok([user, token]);
     }
 
-    public async login(data: { name: string; password: string }): Promise<Output> {
-        const response = await this.userRepository.findByName(data.name);
+    public async login(data: LoginRequest): Promise<Result<[User, string], Error>> {
+        const result = await this.userRepository.findByName(data.name);
+        if (!result.success) return err(result.error);
 
-        if (!response.success) {
-            return { success: false, error: "Não foi possível realizar o login" };
-        } 
+        const user = result.data;
 
-        const user = response.data
-
-        let password;
-        if(user) {
-            password = user.passwordHash;
-        } else {
-            password = await bcrypt.hash("a", 10);
-        }
-        
-        const isMatch = await bcrypt.compare(data.password, password);
-
-        if(!user || !isMatch) {
-            return { success: false, error: "Usuário ou senha inválidos"}
+        if (!user) {
+            return err(new Error("Usuário ou senha incorretos"));
         }
 
-        return { 
-            success: true,
-            role: user.role,
-            token: this.generateToken(user),
-         };
+        const isPasswordValid = await bcrypt.compare(data.password, user.passwordHash);
+        if (!isPasswordValid) {
+            return err(new Error("Usuário ou senha incorretos"));
+        }
+
+        const token = this.generateToken(user);
+
+        return ok([user, token]);
+    }
+
+
+    public async me(userId: string): Promise<Result<User, Error>> {
+        const result = await this.userRepository.findById(userId);
+
+        if (!result.success) return err(result.error);
+
+        const user = result.data;
+
+        if (!user) {
+            return err(new Error("Usuário não encontrado"));
+        }
+
+        return ok(user);
     }
 }
+
+export const authService = new AuthService(userRepository);
