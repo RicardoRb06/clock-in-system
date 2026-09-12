@@ -27,14 +27,14 @@ export class AuthController {
     }
 
     public async login(req: Request, res: Response) {
-        const result = await this.authService.login(req.body);
+        const data = req.body;
+        const result = await this.authService.login(data.name, data.password);
 
         if(!result.success) {
             return fail(res, 400, result.error);
         }
 
-        const [user, token] = result.data as [User, string];
-
+        const token = result.data;
         res.cookie(AUTH_COOKIE_NAME, token, AUTH_COOKIE_OPTIONS);
 
         return complete(res, 201);
