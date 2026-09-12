@@ -17,7 +17,7 @@ export class AuthController {
         const result = await this.authService.register(req.body);
 
         if(!result.success) {
-            return fail(res, result.error);
+            return fail(res, 400, result.error);
         }
 
         const [user, token] = result.data as [User, string];
@@ -31,7 +31,7 @@ export class AuthController {
         const result = await this.authService.login(req.body);
 
         if(!result.success) {
-            return fail(res, result.error);
+            return fail(res, 400, result.error);
         }
 
         const [user, token] = result.data as [User, string];
