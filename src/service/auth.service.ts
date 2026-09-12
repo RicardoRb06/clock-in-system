@@ -32,8 +32,8 @@ export class AuthService {
         return ok(token);
     }
 
-    public async login(data: LoginRequest): Promise<Result<[User, string], Error>> {
-        const result = await this.userRepository.findByName(data.name);
+    public async login(name: string, password: string): Promise<Result<[User, string], Error>> {
+        const result = await this.userRepository.findByName(name);
         if (!result.success) return err(result.error);
 
         const user = result.data;
@@ -42,7 +42,7 @@ export class AuthService {
             return err(new Error("Usuário ou senha incorretos"));
         }
 
-        const isPasswordValid = await bcrypt.compare(data.password, user.passwordHash);
+        const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
         if (!isPasswordValid) {
             return err(new Error("Usuário ou senha incorretos"));
         }
