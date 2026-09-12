@@ -20,9 +20,9 @@ export class AuthService {
         return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' });
     }
 
-    public async register(data: RegisterRequest): Promise<Result<string, Error>> {
-        const hash = await bcrypt.hash(data.password, 10);
-        const user = new User(data.name, hash);
+    public async register(name: string, password: string, category?: string): Promise<Result<string, Error>> {
+        const hash = await bcrypt.hash(password, 10);
+        const user = new User(name, hash, category);
         const result = await this.userRepository.save(user);
 
         if(!result.success) return err(result.error);
