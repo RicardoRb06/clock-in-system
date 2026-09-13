@@ -32,7 +32,7 @@ export class AuthService {
         return ok(token);
     }
 
-    public async login(name: string, password: string): Promise<Result<[User, string], Error>> {
+    public async login(name: string, password: string): Promise<Result<string, Error>> {
         const result = await this.userRepository.findByName(name);
         if (!result.success) return err(result.error);
 
@@ -49,7 +49,7 @@ export class AuthService {
 
         const token = this.generateToken(user);
 
-        return ok([user, token]);
+        return ok(token);
     }
 
 
