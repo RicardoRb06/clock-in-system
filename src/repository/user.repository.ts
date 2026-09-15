@@ -27,18 +27,20 @@ export class UserRepository {
         }
     }
 
-    public async update(user: User): Promise<Result<null, Error>> {
+    public async update(id: string, data: Partial<Omit<User, 'id'>>): Promise<Result<null, Error>> {
         try {
             await this.prisma.user.update({ 
-                where: { id: user.id },
-                data: {
-                    name: user.name,
-                    passwordHash: user.passwordHash,
-                    isActive: user.isActive,
-                    roles: user.role,
-                    category: user.category
-                }
-            });
+                where: { id },
+                data: Object.fromEntries(
+                Object.entries({
+                    name: data.name,
+                    passwordHash: data.passwordHash,
+                    isActive: data.isActive,
+                    roles: data.role,
+                    category: data.category,
+                }).filter(([_, value]) => value !== undefined)
+            )});
+            
             return ok();
         } catch (e) {
             return err(mapError(e));
