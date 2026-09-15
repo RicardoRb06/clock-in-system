@@ -8,7 +8,7 @@ interface AuthJwtPayload {
 }
 
 export type AuthenticatedRequest = Request & {
-    user?: AuthJwtPayload;
+    user: AuthJwtPayload;
 };
 
 export class AuthMiddleware {
