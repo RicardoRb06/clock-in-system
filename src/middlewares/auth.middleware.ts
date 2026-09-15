@@ -19,7 +19,7 @@ export class AuthMiddleware {
         this.jwtSecret = jwtSecret;
     }
 
-    public validate = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+    public validate = (req: Request, res: Response, next: NextFunction): void => {
         const authHeader = req.headers.authorization;
 
         if (!authHeader) {
@@ -38,7 +38,7 @@ export class AuthMiddleware {
             throw new Error("TOKEN_INVALID: O token enviado é inválido.");
         }
 
-        req.user = {
+        (req as AuthenticatedRequest).user = {
             id: decoded.id,
             name: decoded.name,
             role: decoded.role
