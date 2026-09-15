@@ -7,7 +7,7 @@ interface AuthJwtPayload {
     role: string;
 }
 
-type AuthenticatedRequest = Request & {
+export type AuthenticatedRequest = Request & {
     user?: AuthJwtPayload;
 };
 
