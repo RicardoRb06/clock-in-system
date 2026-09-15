@@ -36,6 +36,8 @@ describe("TimeEntryRepository", () => {
         let timeEntry2 = makeTimeEntry({ userId: user.id, clockIn: new Date() });
 
         await timeEntryRepository.create(timeEntry1);
-        await expect(timeEntryRepository.create(timeEntry2)).rejects.toThrow();
+        const result = await timeEntryRepository.create(timeEntry2);
+
+        expect(result.success).toBe(false);
     });
 });

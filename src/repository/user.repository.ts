@@ -36,7 +36,7 @@ export class UserRepository {
                     name: user.name,
                     passwordHash: user.passwordHash,
                     isActive: user.isActive,
-                    roles: user.role,
+                    role: user.role,
                     category: user.category
                 }
             });

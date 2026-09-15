@@ -20,20 +20,20 @@ export class AuthService {
         return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' });
     }
 
-    public async register(data: RegisterRequest): Promise<Result<[User, string], Error>> {
-        const hash = await bcrypt.hash(data.password, 10);
-        const user = new User(data.name, hash);
+    public async register(name: string, password: string, category?: string): Promise<Result<string, Error>> {
+        const hash = await bcrypt.hash(password, 10);
+        const user = new User(name, hash, category);
         const result = await this.userRepository.save(user);
 
         if(!result.success) return err(result.error);
 
         const token = this.generateToken(user);
 
-        return ok([user, token]);
+        return ok(token);
     }
 
-    public async login(data: LoginRequest): Promise<Result<[User, string], Error>> {
-        const result = await this.userRepository.findByName(data.name);
+    public async login(name: string, password: string): Promise<Result<string, Error>> {
+        const result = await this.userRepository.findByName(name);
         if (!result.success) return err(result.error);
 
         const user = result.data;
@@ -42,14 +42,14 @@ export class AuthService {
             return err(new Error("Usuário ou senha incorretos"));
         }
 
-        const isPasswordValid = await bcrypt.compare(data.password, user.passwordHash);
+        const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
         if (!isPasswordValid) {
             return err(new Error("Usuário ou senha incorretos"));
         }
 
         const token = this.generateToken(user);
 
-        return ok([user, token]);
+        return ok(token);
     }
 
 

@@ -2,9 +2,7 @@ import type { Request, Response } from 'express';
 import type { AuthService } from "../service/auth.service.js";
 import { complete, fail } from '../utils/result.js';
 import { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from '../config/cookies.js';
-import type { User } from '../model/User.js';
 import { authService } from "../service/auth.service.js";
-
 
 export class AuthController {
     private authService: AuthService;
@@ -14,28 +12,28 @@ export class AuthController {
     }
 
     public async register(req: Request, res: Response) {
-        const result = await this.authService.register(req.body);
+        const data = req.body;
+        const result = await this.authService.register(data.name, data.password, data.category);
 
         if(!result.success) {
             return fail(res, 400, result.error);
         }
 
-        const [user, token] = result.data as [User, string];
-
+        const token = result.data;
         res.cookie(AUTH_COOKIE_NAME, token, AUTH_COOKIE_OPTIONS);
 
         return complete(res, 201);
     }
 
     public async login(req: Request, res: Response) {
-        const result = await this.authService.login(req.body);
+        const data = req.body;
+        const result = await this.authService.login(data.name, data.password);
 
         if(!result.success) {
             return fail(res, 400, result.error);
         }
 
-        const [user, token] = result.data as [User, string];
-
+        const token = result.data;
         res.cookie(AUTH_COOKIE_NAME, token, AUTH_COOKIE_OPTIONS);
 
         return complete(res, 201);
@@ -54,11 +52,11 @@ export class AuthController {
         const result = await this.authService.me(req.user.id);
 
         if(!result.success) {
-            return fail(res, result.error);
+            return fail(res, 400, result.error);
         }
 
         if(!result.data) {
-            return fail(res, new Error("Erro inesperado no servidor"));
+            return fail(res, 500, new Error("Erro inesperado no servidor"));
         }
 
         return complete(res, 201, { name: result.data.name, role: result.data.role, category: result.data.category  });
