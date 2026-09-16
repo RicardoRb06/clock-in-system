@@ -42,4 +42,4 @@ routes.post('/time-entry/clock-out', authMiddleware.validate, (req, res) => time
 
 routes.get('/users/get-all', authMiddleware.validate, (req, res) => userController.getUsers(req, res));
 
-routes.put('users/update', authMiddleware.validate, (req, res)  => userController.update(req, res));
+routes.put('/users/update', authMiddleware.validate, (req, res)  => userController.update(req, res));
