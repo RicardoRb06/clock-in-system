@@ -8,8 +8,8 @@ interface AuthJwtPayload {
     role: string;
 }
 
-type AuthenticatedRequest = Request & {
-    user?: AuthJwtPayload;
+export type AuthenticatedRequest = Request & {
+    user: AuthJwtPayload;
 };
 
 export class AuthMiddleware {
@@ -33,7 +33,7 @@ export class AuthMiddleware {
             throw new Error("TOKEN_INVALID: O token enviado é inválido.");
         }
 
-        req.user = {
+        (req as AuthenticatedRequest).user = {
             id: decoded.id,
             name: decoded.name,
             role: decoded.role

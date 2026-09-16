@@ -10,6 +10,16 @@ export class UserController {
         this.userService = userService;
     }
 
+    public async update(req: Request, res: Response) {
+        const result = await this.userService.update(req.user.id, req.body);
+
+        if (!result.success) {
+            return fail(res, result.error);
+        }
+
+        return complete(res, 200, result.data); 
+    }
+
     public async findById(req: Request, res: Response) {
         const result = await this.userService.findById(req.body.id);
 

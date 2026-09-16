@@ -28,7 +28,7 @@ export class UserRepository {
         }
     }
 
-    public async update(user: User): Promise<Result<null, Error>> {
+    public async update(id: string, data: Partial<Omit<User, 'id'>>): Promise<Result<null, Error>> {
         try {
             await this.prisma.user.update({ 
                 where: { id: user.id },

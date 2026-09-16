@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client";
+import type { User } from "../model/User.js";
 import type { UserRepository } from "../repository/user.repository.js";
 import { ok, err } from '../utils/result.js';
 import { userRepository } from "../repository/user.repository.js";
@@ -11,8 +11,14 @@ export class UserService {
         this.userRepository = userRepository;
     }
 
-    public async update(user: User) {
-
+    public async update(id: string, data: Partial<Omit<User, "id">>) {
+        const result = await this.userRepository.update(id, data);
+            
+        if (!result.success) {
+            return err(result.error);
+        }
+            
+        return ok(result.data);
     }
 
     public async findById(id: string) {
