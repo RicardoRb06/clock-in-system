@@ -22,14 +22,14 @@ export class User {
     private _role: ROLES;
     private _category: CATEGORY | null;
 
-    constructor(name: string, passwordHash: string, category?: CATEGORY) {
+    constructor(name: string, passwordHash: string, category?: string) {
         this._id = crypto.randomUUID();
         this._name = name;
         this._passwordHash = passwordHash;
         this._isWorking = false;
         this._isActive = true;
         this._role = ROLES.USER;
-        this._category = category ?? null;
+        this._category = category as CATEGORY ?? null;
     }
 
     public get id(): string {

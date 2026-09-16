@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import type { UserService } from "../service/user.service.js";
 import { complete, fail } from '../utils/result.js';
+import { userService } from "../service/user.service.js";
 
 export class UserController {
     private userService: UserService;
@@ -49,3 +50,5 @@ export class UserController {
         return complete(res, 201, result.data);
     }
 }
+
+export const userController = new UserController(userService);

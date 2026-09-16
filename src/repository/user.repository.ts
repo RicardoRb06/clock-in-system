@@ -2,6 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 import { User } from "../model/User.js";
 import { type Result, ok, err } from '../utils/result.js';
 import { mapError } from "../utils/prisma.errors.js";
+import { prisma } from "../database/prisma.js";
 
 export class UserRepository {
 
@@ -30,17 +31,15 @@ export class UserRepository {
     public async update(id: string, data: Partial<Omit<User, 'id'>>): Promise<Result<null, Error>> {
         try {
             await this.prisma.user.update({ 
-                where: { id },
-                data: Object.fromEntries(
-                Object.entries({
-                    name: data.name,
-                    passwordHash: data.passwordHash,
-                    isActive: data.isActive,
-                    roles: data.role,
-                    category: data.category,
-                }).filter(([_, value]) => value !== undefined)
-            )});
-            
+                where: { id: user.id },
+                data: {
+                    name: user.name,
+                    passwordHash: user.passwordHash,
+                    isActive: user.isActive,
+                    role: user.role,
+                    category: user.category
+                }
+            });
             return ok();
         } catch (e) {
             return err(mapError(e));
@@ -115,3 +114,5 @@ export class UserRepository {
         }
     }
 }
+
+export const userRepository = new UserRepository(prisma);
