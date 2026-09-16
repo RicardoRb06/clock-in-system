@@ -21,6 +21,8 @@ model User {
 
   entries TimeEntry[]
 
+  auditLogs    AuditLog[] 
+
   @@map("users")
 }
 
@@ -35,3 +37,16 @@ model TimeEntry {
   @@map("time_entries")
   @@index([userId, clockIn])
 }
+
+model AuditLog {
+  id String @id
+  userId String @map("user_id")
+  action String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("audit_logs")
+}
+
+
