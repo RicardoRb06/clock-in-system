@@ -46,6 +46,37 @@ export class TimeEntryService {
 
         return ok();
     }
+
+    public async getMonthlyTotal(data: { userId: string; year: number; month: number }): Promise<Result<{ userId: string; year: number; month: number; totalMinutes: number; totalHours: number }, Error>> {
+        const { userId, year, month } = data;
+
+        if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12) {
+            return err(new Error("Ano ou mês inválido."));
+        }
+
+        const startDate = new Date(Date.UTC(year, month - 1, 1, 3, 0, 0, 0));
+        const endDate = new Date(Date.UTC(year, month, 1, 3, 0, 0, 0) - 1);
+
+        const findResult = await this.timeEntryRepository.findByUserAndDateRange(userId, startDate, endDate);
+
+        if (!findResult.success) return err(findResult.error);
+        
+        const entries = findResult.data ?? [];
+
+        const totalMs = entries.reduce((acc, entry) => {
+            if (!entry.clockOut) return acc;
+            return acc + (entry.clockOut.getTime() - entry.clockIn.getTime());
+        }, 0);
+        const totalMinutes = Math.floor(totalMs / 1000 / 60);
+
+        return ok({
+            userId,
+            year,
+            month,
+            totalMinutes,
+            totalHours: Math.round((totalMinutes / 60) * 100) / 100
+        });
+    }
 }
 
 export const timeEntryService = new TimeEntryService(timeEntryRepository);

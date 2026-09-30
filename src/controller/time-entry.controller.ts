@@ -15,7 +15,7 @@ export class TimeEntryController {
         const result = await this.timeEntryService.clockIn(req.body);
 
         if (!result.success) {
-            return fail(res, result.error);
+            return fail(res, 400, result.error);
         }
 
         return complete(res, 200, undefined);
@@ -25,10 +25,24 @@ export class TimeEntryController {
         const result = await this.timeEntryService.clockOut(req.body);
 
         if (!result.success) {
-            return fail(res, result.error);
+            return fail(res, 400, result.error);
         }
 
         return complete(res, 200, undefined);
+    }
+
+    async getMonthlyTotal(req: Request, res: Response) {
+        const result = await this.timeEntryService.getMonthlyTotal({
+            userId: String(req.query.userId),
+            year: Number(req.query.year),
+            month: Number(req.query.month)
+        });
+
+        if (!result.success) {
+            return fail(res, 400, result.error);
+        }
+
+        return complete(res, 200, result.data);
     }
 }
 
