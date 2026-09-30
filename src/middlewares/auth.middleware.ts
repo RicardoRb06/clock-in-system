@@ -20,7 +20,7 @@ export class AuthMiddleware {
         this.jwtSecret = jwtSecret;
     }
 
-    public validate = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+    public validate = (req: Request, res: Response, next: NextFunction): void => {
         const token = req.cookies?.auth_token;
         
         if (!token) {
