@@ -32,8 +32,14 @@ export class TimeEntryController {
     }
 
     async getMonthlyTotal(req: Request, res: Response) {
+        const userId = req.user?.id;
+
+        if (!userId) {
+            return fail(res, 401, new Error("Não autenticado."));
+        }
+
         const result = await this.timeEntryService.getMonthlyTotal({
-            userId: String(req.query.userId),
+            userId,
             year: Number(req.query.year),
             month: Number(req.query.month)
         });
