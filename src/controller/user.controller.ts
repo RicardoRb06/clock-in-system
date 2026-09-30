@@ -14,7 +14,7 @@ export class UserController {
         const result = await this.userService.update(req.user.id, req.body);
 
         if (!result.success) {
-            return fail(res, result.error);
+            return fail(res, 400, result.error);
         }
 
         return complete(res, 200, result.data); 
@@ -24,7 +24,7 @@ export class UserController {
         const result = await this.userService.findById(req.body.id);
 
         if(!result.success) {
-            return fail(res, result.error);
+            return fail(res, 400, result.error);
         }
 
         return complete(res, 201, result.data);
@@ -34,7 +34,7 @@ export class UserController {
         const result = await this.userService.findByName(req.body.name);
 
         if(!result.success) {
-            return fail(res, result.error);
+            return fail(res, 400, result.error);
         }
 
         return complete(res, 201, result.data);
@@ -44,7 +44,7 @@ export class UserController {
         const result = await this.userService.getUsers();
 
         if(!result.success) {
-            return fail(res, result.error);
+            return fail(res, 400, result.error);
         }
 
         return complete(res, 201, result.data);
