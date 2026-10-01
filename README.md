@@ -38,7 +38,7 @@ src/ <br>
 ├── middlewares<br>
 ├── dto
 
-## Como rodar o projeto
+## Como rodar o projeto localmente (sem Docker)
 
 1. Clone o repositório
 ```
@@ -66,6 +66,43 @@ pnpm prisma migrate dev
 ```
 pnpm dev
 ```
+
+## Como rodar o projeto com Docker
+
+Pré-requisitos
+- Docker Desktop (ou Engine)
+- Docker Compose
+
+Passo a passo
+
+1. Clone o repositório
+```
+git clone https://github.com/RicardoRb06/clock-in-system.git
+cd clock-in-system
+```
+
+2. Crie o `.env` a partir do exemplo
+```
+cp .env.example .env
+```
+Edite o `.env` e configure as variáveis de ambiente
+
+3. Construa a imagem e suba os containers
+```
+docker compose up --build -d
+```
+
+4. Acompanhe os logs da API
+```
+docker compose logs -f api
+```
+A API está pronta quando aparecer `server open and running on port8080` (o número é o da sua `PORT`)
+
+5. Confira o estado dos serviços: `db` e `api` devem estar `healthy`
+```
+docker compose ps
+``` 
+
 ## Endpoints
 - POST auth/register
 - POST auth/login
