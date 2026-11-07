@@ -18,7 +18,7 @@ export class TimeEntryController {
             return fail(res, 400, result.error);
         }
 
-        return complete(res, 200, undefined);
+        return complete(res, 200, "Ponto aberto com sucesso!");
     }
 
     async clockOut(req: Request, res: Response) {
@@ -28,7 +28,7 @@ export class TimeEntryController {
             return fail(res, 400, result.error);
         }
 
-        return complete(res, 200, undefined);
+        return complete(res, 200, "Ponto fechado com sucesso!");
     }
 
     async getMonthlyTotal(req: Request, res: Response) {
