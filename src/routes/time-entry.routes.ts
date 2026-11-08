@@ -11,7 +11,7 @@ export function createTimeEntryRoutes(): Router {
 
     router.post('/clock-out', authMiddleware.validate, validate(TimeEntryRequestSchema), (req, res) => timeEntryController.clockOut(req, res));
 
-    router.get("/hours", (req, res) => timeEntryController.getMonthlyTotal(req, res));
+    router.get("/hours", authMiddleware.validate, (req, res) => timeEntryController.getMonthlyTotal(req, res));
 
     return router;
 }
