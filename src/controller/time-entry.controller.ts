@@ -32,7 +32,7 @@ export class TimeEntryController {
     }
 
     async getMonthlyTotal(req: Request, res: Response) {
-        const userId = req.user?.id;
+        const userId = req.body.id ? req.body.id : req.user?.id;
 
         if (!userId) {
             return fail(res, 401, new Error("Não autenticado."));
@@ -40,8 +40,8 @@ export class TimeEntryController {
 
         const result = await this.timeEntryService.getMonthlyTotal({
             userId,
-            year: Number(req.query.year),
-            month: Number(req.query.month)
+            year: req.body.year ? req.body.year : Number(Date.prototype.getFullYear),
+            month: req.body.month ? req.body.month : Number(Date.prototype.getMonth)
         });
 
         if (!result.success) {
