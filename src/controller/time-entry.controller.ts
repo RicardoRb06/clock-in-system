@@ -41,7 +41,7 @@ export class TimeEntryController {
         const result = await this.timeEntryService.getMonthlyTotal({
             userId,
             year:  req.body?.year ?? new Date().getFullYear(),
-            month: req.body?.month ?? new Date().getMonth()
+            month: req.body?.month ?? (new Date().getMonth() + 1)
         });
 
         if (!result.success) {
