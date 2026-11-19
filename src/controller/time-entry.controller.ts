@@ -31,8 +31,8 @@ export class TimeEntryController {
         return complete(res, 200, "Ponto fechado com sucesso!");
     }
 
-    async getMonthlyTotal(req: Request, res: Response) {
-        const userId = req.body?.id ?? req.user?.id;
+    async getMyMonthlyTotal(req: Request, res: Response) {
+        const userId = req.user?.id;
 
         if (!userId) {
             return fail(res, 401, new Error("Não autenticado."));
@@ -40,9 +40,29 @@ export class TimeEntryController {
 
         const result = await this.timeEntryService.getMonthlyTotal({
             userId,
-            year:  req.body?.year ?? new Date().getFullYear(),
-            month: req.body?.month ?? (new Date().getMonth() + 1)
+            year: new Date().getFullYear(),
+            month: new Date().getMonth() + 1
         });
+
+        if (!result.success) {
+            return fail(res, 400, result.error);
+        }
+
+        return complete(res, 200, result.data);
+    }
+
+    async getUserMonthlyTotal(req: Request, res: Response) {
+        const userId = req.body.userId;
+
+        if(!userId) {
+            return fail(res, 404, new Error("Usuário não encontrado."));
+        }
+
+        const result = await this.timeEntryService.getMonthlyTotal({
+            userId,
+            year: req.body.year ?? new Date().getFullYear(),
+            month: req.body.month ?? new Date().getMonth() + 1
+        })
 
         if (!result.success) {
             return fail(res, 400, result.error);
